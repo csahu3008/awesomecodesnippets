@@ -1,0 +1,11 @@
+{% extends  'base.html' %}
+
+{% block content %}
+
+Contributer Page
+
+{% for obj in users %}
+<p>  {{obj.email}} has contributed {{obj.score}} snippets </p>
+{% endfor %}
+
+{% endblock content %}

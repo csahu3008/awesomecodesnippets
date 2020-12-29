@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+DELETE YOUR  SNIPPET
+<br />
+Are you sure you really want to delete this<br/>
+<form method="POST">
+    {{object.id}}
+    {{object.title}}
+    {% csrf_token %}
+<input type='submit' value='Delete Snippet' />
+</form>
+
+{% endblock content %}

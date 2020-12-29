@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for object in object_list %}
+<br />
+{{object.id}}
+{{object.title}}
+{{object.highlighted_code}}
+{% endfor %}
+{% endblock content %}

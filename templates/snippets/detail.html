@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/mystyle.css' %}" id='main_style' rel='stylesheet' >
+<link href="{% static 'css/detail.css' %}" id='main_style' rel='stylesheet' >
+<script src="{% static 'js/canvas.min.js' %}"> </script>
+<script src="{% static 'js/filesaver.js' %}"> </script>
+
+DETAIL PAGE FOR SNIPPET
+    <div class="bookmark">
+
+        {% if bookmark_status == True %}
+        <button id='bookmark' class='delete' >Delete Bookmark </button>
+        {% else %}
+        <button id='bookmark' class='add' > Add Bookmark </button>
+        {% endif %}
+        
+    </div>
+    
+    {{object.description_html|safe}}
+    
+    Style : {{form.style}}
+    
+    Dark Mode :  {{form.dark_mode}}
+    
+    Display Line Number: {{form.lines_display}}
+    
+    <div class="increase">➕</div>
+    <div class="decrease">➖</div>
+    <div class='download'>Download</div>
+    
+    {{object.highlighted_code|safe}}
+    
+    
+    {% if object.tags %}
+    
+    {% for t in object.tags %}
+    {{t}}
+    {% endfor %}
+    
+    {% endif %}
+    
+    
+    
+    <div id="comment_section">
+        
+        {% include 'snippets/comments.html' %}
+        {% block comments %}
+        {% endblock comments %}
+    
+    </div>
+
+<script>
+    
+    
+    $(document).ready(function(){
+        
+    var table_class_name='.'+`{{object.style}}`+"table";
+    
+    $(table_class_name).css({'padding':"10px 50px 10px 30px"});
+
+    function freshStyle(stylesheet){
+        $('#main_style').attr('href',stylesheet);
+    }
+    
+    $('.style').change((e)=>{
+        e.preventDefault(); 
+        var value=$('.style').val();
+        $.ajax({url:`{% url 'change_style' %}`,data:{"style":value } ,success:()=>
+        { 
+        event.preventDefault();
+        var restyled = '{% static "css/mystyle.css" %}'+'?v='+Math.random(0,10000); 
+        freshStyle(restyled);
+
+         },error:()=>{
+            console.log("Error")
+        } })
+
+    })
+
+        $('.dark_mode').change((e)=>{
+            // e.preventDefault();
+            var value=$('.dark_mode').prop("checked") ;
+            if(value==true){
+                $(table_class_name).addClass('dark_mode');
+                $('pre').addClass('dark_pre');
+            }else{
+                $(table_class_name).removeClass('dark_mode');
+                $('pre').removeClass('dark_pre');
+            }
+        })
+
+
+        $('.lines_display').change((e)=>{
+            // e.preventDefault();
+            var value=$('.lines_display').prop("checked") ;
+            if(value==true){
+                $('.linenos').addClass('hide_lines');
+            }else{
+                $('.linenos').removeClass('hide_lines');
+            }
+        })
+       
+
+
+        $('.increase').click((e)=>{
+            var font_size=$(table_class_name).css('font-size');
+            font_size=font_size.substring(0,font_size.length-2);
+
+            if(parseInt(font_size)<30){
+                
+                $(table_class_name).css('font-size',`${parseInt(font_size)+1}px`);
+            }
+  
+        }) ;
+
+        $('.decrease').click((e)=>{
+            var font_size=$(table_class_name).css('font-size');
+            font_size=font_size.substring(0,font_size.length-2);
+            if(parseInt(font_size)>12){
+                    $(table_class_name).css('font-size',`${parseInt(font_size)-1}px`);
+            }
+
+        });
+
+
+        $('.download').click(()=>{
+            html2canvas(document.querySelector(table_class_name)).then(canvas => {
+                canvas.toBlob(function(blob) {
+                    saveAs(blob, "Dashboard.png"); 
+                })
+
+            });
+        })
+        
+        $('#bookmark').click(function(){
+            
+            console.log("Button Was Clicked")
+            var check=$("#bookmark").hasClass('add');
+            if(check==true){
+                // make ajax call for add 
+                $('#bookmark').toggleClass('delete add')
+                $('#bookmark').text('Delete Bookmark')
+            //   make AJAX calls
+                $.ajax({
+                method:'post',
+                url:'{% url "add_bookmark" %}',
+                data:{"snippet_id": '{{object.id}}' },
+                success:function(data){ 
+                    console.log(data) 
+                },
+                error:function(error){
+                    console.log(error)
+                }
+            })
+            }else{
+                // make ajax call for delete
+                $('#bookmark').toggleClass('add delete')
+                $('#bookmark').text('Add Bookmark')
+                $.ajax({
+                method:'post',
+                url:'{% url "delete_bookmark" %}',
+                data:{"snippet_id": '{{object.id}}' },
+                success:function(data){ console.log(data) },
+                error:function(error){
+                    console.log(error)
+                }
+            })
+
+            }
+           
+        })
+
+});
+</script>
+
+{% endblock content %}

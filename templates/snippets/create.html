@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+CREATE YOUR FAVIORATE SNIPPET
+<form method="POST">
+{{form.as_p}}
+{% csrf_token %}
+<input type='submit' value='create Snippet' />
+</form>
+{% endblock content %}

@@ -1,0 +1,14 @@
+.dark_mode{
+    background-color: black;
+    color:white;
+    filter:brightness(200%) !important;
+}
+
+.dark_pre{
+    background-color: black !important;
+    color:white !important;
+}
+
+.hide_lines{
+    display: none !important;
+}

@@ -1,0 +1,61 @@
+{% extends  'base.html' %}
+
+{% block content %}
+
+Contributer Page
+<div class="langplusdata">
+
+    <div class="languages">
+        
+        {% for lang,count in total_langs %}
+        
+        {% if not count == 0 or forloop.counter0 < 10 %}
+        <div>
+            <p>  {{lang}} has contributed {{count}} snippet </p>
+            <a href='{% url "detail_lang" lang %}'> See Articles from {{lang}} </a>
+            <input type="hidden" value="{{lang}}" disabled />
+        </div>
+        
+        {% endif %}
+        
+        {% endfor %}
+    </div>
+    
+    <div class="show-data"></div>
+</div>
+<script>
+
+    $(document).ready(()=>{
+                $('.languages > div').click(function(e){
+                    var clicked=$(this);
+                   clicked.addClass('change_bg'); 
+                   $('.languages > div').not(this).removeClass('change_bg'); 
+                    $('.show-data').css('visibility','hidden').fadeOut(200);
+                    var language=clicked.children('input').val();
+                    console.log(window.location)
+                    
+                    $.ajax({
+                        url:'/language/detail/'+language,
+                        success:function(data,status,xhr){
+                            console.log(data) 
+                            $('.show-data').css('visibility','visible').fadeIn(200)
+                            html=''
+                            $(data).each(function(index,element){
+                                html+=`<div class=${index}> ${element.fields.title} `
+                                html+=`<br/> ${element.fields.coder[1]} `
+                                html+=`<br/> ${element.fields.publication_date} </div>`
+                            })
+                            $('.show-data').html(html);
+
+                             },
+
+                        error:function(){}
+                    })
+
+                
+                })
+    })
+</script>
+
+
+{% endblock content %}

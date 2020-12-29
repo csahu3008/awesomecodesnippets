@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==3.1.4"
+pygments = "==2.7.2"
+django-tagging = "*"
+markdown = "==3.2.1"
+django-allauth = "==0.43.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"

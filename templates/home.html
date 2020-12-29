@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>HOME PAGE</h1>
+
+{{message}}
+<h2>Latest Snippets </h2>
+{% for obj in latest %}
+      {{obj.title}}
+{% endfor %}
+<h2>Top Contributers </h2>
+
+{% for obj in top_contributers %}
+<p>
+   {{obj.email}} has conrtibuted  {{obj.score}} snippets
+   See Profile
+   <a href="random">click here</a>
+</p>     
+   {% endfor %}
+
+<h2>Top Languages </h2>
+
+{% for lang,count in total_langs %}
+
+{% if not count == 0 or forloop.counter0 < 10 %}
+<div>
+      <p>  {{lang}} ( {{count}} ) snippets </p>
+      <a href='{% url "detail_lang" lang %}'> See Articles from {{lang}} </a>
+      <input type="hidden" value="{{lang}}" disabled />
+   </div>
+      {% endif %}
+   {% endfor %}
+
+
+
+{% if user.is_authenticated %}
+   Hello {{user.email}}
+ <p> <a href="{% url 'account_logout' %}" >Logout</a></p>
+
+{% else %}
+    Hello Annoynymus
+   <a href="{% url 'account_login' %}" >Login</a>
+
+
+   {% endif %}
+
+{% endblock content %}

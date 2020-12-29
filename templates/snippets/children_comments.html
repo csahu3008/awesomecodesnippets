@@ -1,0 +1,45 @@
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+
+<h1>
+    Child Comments 
+</h1>
+
+
+<div class="comment" id='comment'>
+    {% for comment in comments %}
+    <div >
+        {{comment.detail|safe}} 
+        {{comment.date_commented}}
+        <input class='comment_id' type='hidden' value='{{comment.id}}'>
+        <button class="individual">Read All replies</button>
+        <div class='childs'></div>
+    </div>
+        {% empty %}
+        <p>No Comments Yet</p>
+        {% endfor %}
+        
+</div>    
+<!-- <script>
+ $(document).ready(function(){
+
+$('.individual').click(function(e){
+            console.log($(this).siblings('.comment_id').val())
+            var comment_id=$(this).siblings('.comment_id').val();
+           var parent= $(this);
+           $.ajax({
+                method:'get',
+                url:'{% url "child_comment" %}',
+                data:{"comment_id":comment_id},
+                success:function(data){ 
+                    parent.siblings('.childs').html(data)
+                
+                },
+                error:function(error){
+                    console.log("Error was encountered")
+                    console.log(error)
+                }
+            });
+
+        })
+    });
+</script> -->

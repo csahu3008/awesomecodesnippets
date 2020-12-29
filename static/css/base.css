@@ -1,0 +1,36 @@
+*{
+    margin:0px;
+}
+
+body{
+    width: auto;
+   width:300px;
+}
+
+.langplusdata {
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+}
+.languages{
+    flex:0.4 !important;
+}
+
+.languages > div{
+    height:100px;
+    width:auto;
+    padding:5px;
+    background-color: gray;
+    color:white;
+    margin: 5px;
+}
+
+.change_bg{
+    background-color: mediumseagreen !important ;
+}
+
+.show-data{
+    /* display: none; */
+    background:cadetblue;
+    flex:0.6;
+}

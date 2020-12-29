@@ -1,0 +1,131 @@
+
+{% block comments %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<style>
+    .comment > div {
+        /* border:2px solid gold; */
+        margin: 10px;
+        padding:5px;
+        margin-left:40px;
+    }
+</style>
+
+<h1>Comments</h1>
+<h3>Add A comment </h3>
+
+<form method='post' class="commentform">
+    {% csrf_token %} 
+    {{commentform.as_table}}
+    <button type="submit" >comment</button>
+</form>
+
+
+<div class="comment" id='comment'>
+    {% for comment in comments %}
+    <div class="co">
+        {{comment.detail|safe}} 
+        {{comment.date_commented}}
+        <input class='comment_id' type='hidden' value='{{comment.id}}'>
+
+        
+        <button class="individual">Read All replies</button>
+        <div class='childs'></div>
+        <button class="reply">reply now</button>
+        
+        <form method='post' style="display:none;" class="replyform">
+            {% csrf_token %} 
+            {{commentform.as_table}}
+            <button type="submit" >comment</button>
+        </form>
+        
+
+    </div>
+    {% empty %}
+    <p>No Comments Yet</p>
+    {% endfor %}
+    
+</div>    
+
+
+
+<script>
+    
+    $(document).ready(function(){
+        //   make AJAX calls
+        $('.commentform').submit(function(e){
+            e.preventDefault();
+            // var token='{% csrf_token %}'
+            // console.log(token)
+            var data=$('.commentform').serialize()+`&snippet_id={{object.id}}`
+            $.ajax({
+                method:'post',
+                url:'{% url "add_comment" %}',
+                data:data,
+                success:function(data){ 
+                    $('#comment').load(' #comment')
+                },
+                error:function(error){
+                    console.log("Error was encountered")
+                    console.log(error)
+                }
+            });
+        })
+    
+        $('.comment').on('click','div > .individual',function(e){
+            console.log($(this).siblings('.comment_id').val())
+            var comment_id=$(this).siblings('.comment_id').val();
+           var parent= $(this);
+           $.ajax({
+                method:'get',
+                url:'{% url "child_comment" %}',
+                data:{"comment_id":comment_id},
+                success:function(data){ 
+
+                    parent.siblings('.childs').html(data)
+                
+                },
+                error:function(error){
+                    console.log("Error was encountered")
+                    console.log(error)
+                }
+            });
+
+        })
+
+        // making an AJAX CALL FOR MAKING REPLIES
+        $('.comment').on('click','div > .reply',function(e){
+            console.log($(this).parent())
+            $(this).siblings('.replyform').css('display','block')
+            $(this).hide()
+            console.log("Reply button was clicked")
+        })
+
+        $('.replyform').submit(function(e){
+            e.preventDefault();
+            // var token='{% csrf_token %}'
+            // console.log(token)
+            var parent_comment_id = $(this).siblings('.comment_id').val();
+            var data=$('.replyform').serialize()+`&snippet_id={{object.id}}&parent_comment_id=${parent_comment_id}`
+            console.log("Parent Comment id is ",parent_comment_id)
+            $.ajax({
+                method:'post',
+                url:'{% url "add_comment" %}',
+                data:data,
+                success:function(data){ 
+                    $('#comment').load(' #comment')
+                },
+                error:function(error){
+                    console.log("Error was encountered")
+                    console.log(error)
+                }
+            });
+            console.log(data)
+        }) 
+         
+
+
+        });
+
+</script>
+{% endblock comments %}
