@@ -1,10 +1,101 @@
 {% extends 'base.html' %}
 
+
+
 {% block content %}
-Login Here
-<form method="POST">
-    {{form.as_p}}
-    {% csrf_token %}
-    <input type='submit' value="Login"/>
-</form>
+{% load static %}
+<style> 
+
+body{
+   background: url("{% static 'img/shapes_1_black.png' %}");
+  height:100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+} 
+.main{
+  display: flex;
+  justify-content: center;
+   align-items:center;
+}
+form{
+    padding:40px;
+    display: flex;
+    flex-flow: column;
+}
+.field{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+input[type='email'],input[type='password']{
+    padding:15px;
+    color:white;
+    height:50px;
+    width:400px;
+    outline: none;
+    border:2px solid orange;
+    background: none;
+    border-radius: 100px;
+}
+</style>
+
+
+{% include 'navbar.html' %}
+{% block navbar %}
+{% endblock navbar %}
+<div class="main">
+
+    <div class='section'>
+        
+        <form method="post">
+            <h2 class=" has-text-primary title" style="text-align: center;">Login</h2>
+            
+            <div>
+                {% if form.errors %}
+                {% for field in form %}
+            {% for error in field.errors %}
+            <div >
+                <p class="has-text-white" style="font-size: 13px;">{{ error|escape }}</p>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <div >
+                <p style="font-size: 13px;" class="has-text-white">{{ error|escape }}</p>
+            </div>
+            {% endfor %}
+            {% endif %}
+            </div>
+
+            <div class="field ">
+                <label class="label has-text-info">Email</label>
+                <div class="control">
+                    {{form.login}}
+                </div>
+                <p class="help has-text-white">Enter Your Email Address </p>
+            </div>
+            
+            <div class="field ">
+                <label class="label has-text-info">Password</label>
+                <div class="control">
+                    {{form.password}}
+                </div>
+                <p class="help has-text-white">Enter your Password</p>
+            </div>
+            {% csrf_token %}
+            <div> new member <a href="{% url 'account_signup' %}"> signup </a> here</div>
+            <!-- <div> forget <a href="{% url 'account_signup' %}"> click here </a> here</div> -->
+            
+            <input type='submit' class="is-success button" value='Login' />
+        </form>
+        <div class="remaining">
+        </div>
+        
+        
+    </div>
+    
+</div>
+
+
+
 {% endblock content %}

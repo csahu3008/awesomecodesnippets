@@ -14,7 +14,11 @@ from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+import dj_database_url
 
+
+# db_from_env = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(db_from_env)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -23,9 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '^f#8_e49)i7_em$-z_kz61_m1*)zc=zdi6dy*j+jx$wh!iq16g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['*','.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -37,21 +42,36 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'django.contrib.sites',
     'allauth',
+    'whitenoise.runserver_nostatic',
     'allauth.account',
     'tagging',
     'snippets',
-    'comments'
+    'comments',
+    'ckeditor'
 ]
 
 SITE_ID=1
+
+
+# SECURE_BROWSER_XSS_FILTER = True
+# X_FRAME_OPTIONS = 'DENY'
+# SECURE_SSL_REDIRECT = True
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SESSION_COOKIE_SECURE = True # new
+# CSRF_COOKIE_SECURE = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # new
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -70,6 +90,7 @@ ROOT_URLCONF = 'awesomecodesnippets.urls'
 AUTH_USER_MODEL='snippets.CustomUser'
 
 LOGIN_REDIRECT_URL = 'home'
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS=True
 ACCOUNT_LOGOUT_REDIRECT = 'home'
 ACCOUNT_USERNAME_REQUIRED=False
 ACCOUNT_AUTHENTICATION_METHOD='email'
@@ -77,6 +98,11 @@ ACCOUNT_EMAIL_REQUIRED=True
 ACCOUNT_SESSION_REMEMBER = True 
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE=False
 ACCOUNT_UNIQUE_EMAIL=True
+ACCOUNT_LOGOUT_ON_GET=True
+ACCOUNT_EMAIL_VERIFICATION="none"
+ACCOUNT_FORMS = {'signup': 'snippets.form.MyCustomSignupForm'}
+
+
 
 TEMPLATES = [
     {
@@ -146,3 +172,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS=(str(BASE_DIR.joinpath('static')),)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # new

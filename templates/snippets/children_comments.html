@@ -1,8 +1,5 @@
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 
-<h1>
-    Child Comments 
-</h1>
 
 
 <div class="comment" id='comment'>
@@ -11,8 +8,14 @@
         {{comment.detail|safe}} 
         {{comment.date_commented}}
         <input class='comment_id' type='hidden' value='{{comment.id}}'>
-        <button class="individual">Read All replies</button>
+        <button class="individual button is-warning">Read All replies</button>
         <div class='childs'></div>
+       
+        <button class="reply button is-info">reply now</button>
+        <div style="display:none;" class="replyform">
+            <input type="text" name='detail' class="input reply-detail" >
+            <button class='reply-button button is-link'>comment</button>
+        </div>
     </div>
         {% empty %}
         <p>No Comments Yet</p>

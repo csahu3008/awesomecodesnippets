@@ -14,3 +14,15 @@ class Comment(models.Model):
     # def get_absolute_url(self):
     #     return reverse('detail_comments',args=[str(self.pk)])
 
+
+
+class Ratings(models.Model):
+    point=models.IntegerField(choices=((1,"Useful"),(-1,"Not Useful")))
+    snippet=models.ForeignKey(Snippet,on_delete=models.CASCADE)
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.email+"  "+self.snippet.title+"  "+str(self.point)
+    
+    class Meta:
+        verbose_name_plural='Ratings'

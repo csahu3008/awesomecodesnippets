@@ -2,14 +2,95 @@
 
 {% block content %}
 
-DELETE YOUR  SNIPPET
-<br />
-Are you sure you really want to delete this<br/>
-<form method="POST">
-    {{object.id}}
-    {{object.title}}
-    {% csrf_token %}
-<input type='submit' value='Delete Snippet' />
-</form>
+{% load static %}
+{% include 'navbar.html' %}
+{% block navbar %}
+{% endblock navbar %}
+{% load i18n %}
+{% load account %}
+
+<style>
+section{
+    justify-content: center !important;
+}
+
+.hero{
+    background: url('{% static "img/shapes_1_black.png" %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.main-section{
+   width:50%;
+  margin-left:20%;
+  margin-top:5%;
+  background-color: rgba(59, 56, 56, 0.486);
+  z-index: 1 !important;
+   padding:50px;
+   position: relative;
+  /* border: 2px solid red;  */
+}
+form{
+    padding:30px;
+    display: flex;
+    flex-flow: column;
+}
+.field{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+input[type='email'],input[type='text'],input[type='password']{
+    padding:15px;
+    color:white;
+    height:50px;
+    /* width:400px; */
+    outline: none;
+    border:2px solid orange;
+    background: none;
+    border-radius: 100px;
+}
+input[type='submit']{
+    margin-top: 10px;
+}
+
+
+</style>
+
+<section class="hero  is-fullheight" style="display: block;">
+  <div class="hero-body ">
+      
+    <div class='main-section'>
+    <p class='title is-2 has-text-danger'>{% trans "Delete Code Snippet" %}</p>
+    
+    <div>
+        {% if form.errors %}
+        {% for field in form %}
+    {% for error in field.errors %}
+    <div >
+        <p class="has-text-white" style="font-size: 13px;">{{ error|escape }}</p>
+    </div>
+    {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+    <div >
+        <p style="font-size: 13px;" class="has-text-white">{{ error|escape }}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+    </div>
+
+      <form method="POST">
+            <p class='subtitle has-text-white is-4'>Do you really want to delete this snippet </p>
+            <p class='subtitle has-text-primary is-6'>{{object.title}} </p>
+        
+        {% csrf_token %}
+        <input type='submit' class="is-danger button" value='Delete Snippet' />
+
+      
+    </div>
+        
+    </div>
+</div>
+</section>
 
 {% endblock content %}

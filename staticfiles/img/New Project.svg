@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+	<defs>
+		<image width="1280" height="720" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABQAAAALQAQMAAAD1s08VAAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAAIdJREFUeJztwTEBAAAAwqD1T20JT6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeBrE3wABB8CymgAAAABJRU5ErkJggg=="/>
+		<linearGradient id="grd1" gradientUnits="userSpaceOnUse"  x1="737.095" y1="1027.023" x2="1177.44" y2="264.322">
+			<stop offset="0" stop-color="#ff1693"  />
+			<stop offset="1" stop-color="#ff2246"  />
+		</linearGradient>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #19c376 } 
+		.shp1 { fill: url(#grd1) } 
+	</style>
+	<use id="Background" href="#img1" x="0" y="0" />
+	<path id="Layer 1" class="shp0" d="M257.84 886.16C245.68 12.73 1677.34 6.01 1689.32 867.04C1690 915.83 258.34 922.56 257.84 886.16Z" />
+	<path id="Gradient Fill 1" class="shp1" d="M241.65 826.14C360.17 -46.92 1783.52 158.93 1666.68 1019.6C1660.06 1068.36 236.71 862.52 241.65 826.14Z" />
+</svg>

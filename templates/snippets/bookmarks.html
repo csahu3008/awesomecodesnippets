@@ -1,0 +1,84 @@
+{% extends  'base.html' %}
+
+
+{% block content %}
+{% load static %}
+{% load humanize %}
+<link rel="stylesheet" href="{% static 'css/user_detail.css' %}">
+
+{% include 'navbar.html' %}
+{% block navbar %}
+{% endblock navbar %}
+
+<div class="main-section">
+    <div>
+        <p class='has-text-white is-centered title' style="text-align: center;">My BookMarks</p>
+        <div class="user_detail">
+            
+
+            {% for obj in object_list %}
+              
+            
+            <div class="card my-cards" >
+                <div class="card-content">
+                  <p class="title is-4">
+                        {{obj.snippet.title}}
+                </p>
+                  <p class="subtitle is-6">
+                  language: {{obj.snippet.language}} |  {{obj.snippet.publication_date|naturaltime}}
+                  </p>
+                  <p class="subtitle is-6 has-text-info">
+                    {{obj.snippet.description_html|safe|truncatechars:50}} 
+                    </p>
+                </div>
+                <footer class="card-footer">
+                  <p class="card-footer-item">
+                    <span>
+                      <a href="{% url 'detail_snippet' obj.id %}"> see </a>
+                    </span>
+                  </p>
+                  <p class="card-footer-item">
+                    <span>
+                      Share on <a href="#">Twitter</a>
+                    </span>
+                  </p>
+                </footer>
+              </div>
+                   
+            <br/>
+            <br/>
+            {% endfor %}
+            <br />
+            
+        </div>
+        
+        
+        {% if user_snippets.has_other_pages %}
+        <nav class="pagination is-right is-rounded" role="navigation" aria-label="pagination">
+            
+            <ul class="pagination-list is-current">
+                <li>
+                    <a class="pagination-link is-current  " aria-label="Page 1" aria-current="page">
+                        {{user_snippets.number}}
+                    </a>
+                </li>
+            </ul>
+            
+            {% if user_snippets.has_previous %}
+            <a class="pagination-previous has-text-white" title="This is the first page" href="?page={{user_snippets.previous_page_number}}" >Previous</a>
+            {% else %}
+            <a class="pagination-previous has-text-white" title="This is the first page" disabled>Previous</a>
+            {% endif %}
+            
+            
+            {% if user_snippets.has_next %}
+            <a href="?page={{user_snippets.next_page_number}}" class="pagination-next has-text-white">Next page</a>
+            {% else %}
+            <a  class="pagination-next has-text-white" disabled >Next page</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+        </div>
+    </div>
+    
+    {% endblock content %} 

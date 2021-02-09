@@ -1,59 +1,151 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block content %}
-<link href="{% static 'css/mystyle.css' %}" id='main_style' rel='stylesheet' >
-<link href="{% static 'css/detail.css' %}" id='main_style' rel='stylesheet' >
-<script src="{% static 'js/canvas.min.js' %}"> </script>
-<script src="{% static 'js/filesaver.js' %}"> </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+    <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
+    <link href="{% static 'css/mystyle.css' %}" id='main_style' rel='stylesheet' >
+    <link href="{% static 'css/detail.css' %}" id='main_style' rel='stylesheet' >
+    <script src="{% static 'js/canvas.min.js' %}"> </script>
+    <script src="{% static 'js/filesaver.js' %}"> </script>
+    <title>AWESOME CODE SNIPPETS </title>
+    
+</head>
+<style>
 
-DETAIL PAGE FOR SNIPPET
-    <div class="bookmark">
+    .my-messages{
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top:0px;
+    padding:10px;
+    left:40%;
+    border-bottom: 3px solid blue;
+    background-color:rgb(0, 202, 135);
+} 
+</style>
+<body>
 
-        {% if bookmark_status == True %}
-        <button id='bookmark' class='delete' >Delete Bookmark </button>
+    <div class="my-messages">
+    </div>
+
+    {% load static %}
+    {% load humanize %}
+        
+    {% include 'navbar.html' %}
+
+    {% block navbar %}
+    {% endblock navbar %}
+
+    <div class="middle-part">
+
+        <div class="title-section">
+            <div class="title has-text-info">{{object.title}}</div>
+   
+            <div>
+                <div class="snip-detail"><p>By : {{object.coder.name|default:"NA"}} </p> 
+                    <p>Language: {{object.language}} </p>
+                    <p>Date Published: {{object.publication_date|naturaltime}} </p></div>
+            </div>
+            
+            {% if user.is_authenticated  %}
+            <div class="bookmark">
+                
+                {% if bookmark_status == True %}
+                <button id='bookmark' class='remove button is-danger' >Delete Bookmark </button>
+                {% else %}
+                <button id='bookmark' class='add button is-primary' > Add Bookmark </button>
+                {% endif %}
+                
+            </div>
+            {% endif %}
+
+        </div>
+        
+        <div class="description-section">
+                {{object.description_html|safe}}
+        </div>
+        
+        <div class="code-section">
+            
+            <div class="options">
+                <span>
+                    Style : {{form.style}}
+                </span> 
+    
+                <span>
+                    Dark Mode :  {{form.dark_mode}}
+                </span>
+                
+                <span>Line Number: {{form.lines_display}}</span>
+                <span class='download'>Download</span>
+               <span>
+                   Font Size:
+                   <span class="increase " style="font-size:20px;color:red !important;">➕</span>
+                   <span class="decrease">➖</span>
+               </span>
+               <!-- <div class="rate">
+                   USEFUL !
+                </div> -->
+            </div>
+            
+            <div class="code">
+                {{object.highlighted_code|safe}}
+            </div>
+        </div>
+
+        <div class="tags">
+            {% if object.tags %}
+            {{object.tags}}
+            {% endif %}
+        </div>
+        
+
+        <div class="comment-section" id="comment_section">
+            
+        {% if user.is_authenticated  %}
+            {% include 'snippets/comments.html' %}
+            {% block comments %}
+            {% endblock comments %}
         {% else %}
-        <button id='bookmark' class='add' > Add Bookmark </button>
+         <a href="{% url 'account_login' %}"> Login </a>to see the comments 
         {% endif %}
-        
-    </div>
-    
-    {{object.description_html|safe}}
-    
-    Style : {{form.style}}
-    
-    Dark Mode :  {{form.dark_mode}}
-    
-    Display Line Number: {{form.lines_display}}
-    
-    <div class="increase">➕</div>
-    <div class="decrease">➖</div>
-    <div class='download'>Download</div>
-    
-    {{object.highlighted_code|safe}}
-    
-    
-    {% if object.tags %}
-    
-    {% for t in object.tags %}
-    {{t}}
-    {% endfor %}
-    
-    {% endif %}
-    
-    
-    
-    <div id="comment_section">
-        
-        {% include 'snippets/comments.html' %}
-        {% block comments %}
-        {% endblock comments %}
-    
-    </div>
+        </div>
 
-<script>
+    </div>
+    
+ 
+   
+    
+   
+    
+
+    <!-- <div class='download'>Download</div> -->
     
     
-    $(document).ready(function(){
+    <!-- {% for t in object.tags %}
+        {{t}}
+    {% endfor %}
+-->
+
+
+
+    
+    
+    <script>
+
+        
+        
+        $(document).ready(function(){
+            
+            function messages(msg) {
+                    $('.my-messages').html("<h1>"+msg+"</h1>");
+                    $('.my-messages').show(200).animate({'top':'150px'},300).fadeIn( 400 ).fadeOut(3000).animate({'top':'0px'});
+            }
         
     var table_class_name='.'+`{{object.style}}`+"table";
     
@@ -84,9 +176,11 @@ DETAIL PAGE FOR SNIPPET
             if(value==true){
                 $(table_class_name).addClass('dark_mode');
                 $('pre').addClass('dark_pre');
+                $('.code').addClass('dark');
             }else{
                 $(table_class_name).removeClass('dark_mode');
                 $('pre').removeClass('dark_pre');
+                $('.code').removeClass('dark');
             }
         })
 
@@ -125,53 +219,77 @@ DETAIL PAGE FOR SNIPPET
 
 
         $('.download').click(()=>{
-            html2canvas(document.querySelector(table_class_name)).then(canvas => {
+            html2canvas(document.querySelector(table_class_name),{scrollY: -window.scrollY}).then(canvas => {
                 canvas.toBlob(function(blob) {
                     saveAs(blob, "Dashboard.png"); 
                 })
 
             });
         })
+     
         
-        $('#bookmark').click(function(){
-            
-            console.log("Button Was Clicked")
-            var check=$("#bookmark").hasClass('add');
-            if(check==true){
-                // make ajax call for add 
-                $('#bookmark').toggleClass('delete add')
-                $('#bookmark').text('Delete Bookmark')
-            //   make AJAX calls
-                $.ajax({
-                method:'post',
-                url:'{% url "add_bookmark" %}',
-                data:{"snippet_id": '{{object.id}}' },
-                success:function(data){ 
-                    console.log(data) 
-                },
-                error:function(error){
-                    console.log(error)
+            $('#bookmark').click(function(){
+                var check=$("#bookmark").hasClass('add');
+                if(check==true){
+                    // make ajax call for add 
+                    $('#bookmark').toggleClass('remove add')
+                    $('#bookmark').removeClass('is-primary')
+                    $('#bookmark').addClass('is-danger')
+                    $('#bookmark').text('Delete Bookmark')
+                //   make AJAX calls
+                    $.ajax({
+                    method:'post',
+                    url:'{% url "add_bookmark" %}',
+                    data:{"snippet_id": '{{object.id}}' },
+                    success:function(data){ 
+                    },
+                    error:function(error){
+                        messages("Successfully Bookmarked");
+
+                        // console.log(error)
+                    }
+                })
+                }else{
+                    // make ajax call for delete
+
+                    $('#bookmark').toggleClass('add remove')
+                    $('#bookmark').removeClass('is-danger')
+                    $('#bookmark').addClass('is-primary')
+                    $('#bookmark').text('Add Bookmark')
+                    $.ajax({
+                    method:'post',
+                    url:'{% url "delete_bookmark" %}',
+                    data:{"snippet_id": '{{object.id}}' },
+                    success:function(data){ 
+                        },
+                    error:function(error){
+                        messages("Bookmark removed");
+   
+                    }
+                })
+    
                 }
-            })
-            }else{
-                // make ajax call for delete
-                $('#bookmark').toggleClass('add delete')
-                $('#bookmark').text('Add Bookmark')
-                $.ajax({
-                method:'post',
-                url:'{% url "delete_bookmark" %}',
-                data:{"snippet_id": '{{object.id}}' },
-                success:function(data){ console.log(data) },
-                error:function(error){
-                    console.log(error)
-                }
+               
             })
 
-            }
-           
+
+        $('.rate').on('click',function(){
+            console.log("FUnction was clikd ")
+            $.ajax({
+                method:'post',
+                url:'{% url "rating" %}',
+                data:{"snippet_id":'{{object.id}}','point':1},
+                success:function(data){
+                    console.log("Successful attempt")
+                },
+                error:function(err){
+                    console.log("Error Attempt")
+                }
+            })
         })
 
 });
 </script>
 
-{% endblock content %}
+</body>
+</html>

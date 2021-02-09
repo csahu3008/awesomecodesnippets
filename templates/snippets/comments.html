@@ -5,18 +5,50 @@
 <style>
     .comment > div {
         /* border:2px solid gold; */
-        margin: 10px;
+        margin: 5px;
         padding:5px;
         margin-left:40px;
     }
+    .comment-title{
+            font-family: 'fira code';
+            font-size: large;
+            color:blue;
+        }
+        
+        .commentform {
+            display: flex;
+            align-items: center;
+        }
+
+        .commentform > textarea{
+            border: 1px solid blue;
+            background-color: transparent;
+            padding:5px 10px;
+            width:300px;
+            font-size: 20px;
+            height: 60px;
+            border-radius: 20px;
+            outline: none;
+        }
+        .commentform > button{
+            width:100px;
+            margin-left: 30px;
+            height:40px;
+            font-size: medium;
+            background-color: blue;
+            color: white;
+            outline: none;
+            border: none;
+            border-radius: 10px;
+        }
+
 </style>
 
-<h1>Comments</h1>
-<h3>Add A comment </h3>
+<p class='comment-title'>Comments</p>
 
 <form method='post' class="commentform">
     {% csrf_token %} 
-    {{commentform.as_table}}
+    {{commentform.detail}}
     <button type="submit" >comment</button>
 </form>
 
@@ -27,20 +59,16 @@
         {{comment.detail|safe}} 
         {{comment.date_commented}}
         <input class='comment_id' type='hidden' value='{{comment.id}}'>
-
-        
-        <button class="individual">Read All replies</button>
+        <button class="individual button is-warning">Read All replies</button>
         <div class='childs'></div>
-        <button class="reply">reply now</button>
         
-        <form method='post' style="display:none;" class="replyform">
-            {% csrf_token %} 
-            {{commentform.as_table}}
-            <button type="submit" >comment</button>
-        </form>
-        
-
+        <button class="reply button is-link" >reply now</button>
+        <div style="display:none;" class="replyform">
+            <input type="text" name='detail' class="reply-detail" >
+            <button class='reply-button '>comment</button>
+        </div>
     </div>
+
     {% empty %}
     <p>No Comments Yet</p>
     {% endfor %}
@@ -53,12 +81,15 @@
     
     $(document).ready(function(){
         //   make AJAX calls
+        
         $('.commentform').submit(function(e){
             e.preventDefault();
             // var token='{% csrf_token %}'
             // console.log(token)
-            var data=$('.commentform').serialize()+`&snippet_id={{object.id}}`
-            $.ajax({
+                
+                
+                var data=$('.commentform').serialize()+`&snippet_id={{object.id}}`
+                $.ajax({
                 method:'post',
                 url:'{% url "add_comment" %}',
                 data:data,
@@ -70,8 +101,10 @@
                     console.log(error)
                 }
             });
+        
         })
-    
+
+        
         $('.comment').on('click','div > .individual',function(e){
             console.log($(this).siblings('.comment_id').val())
             var comment_id=$(this).siblings('.comment_id').val();
@@ -90,7 +123,6 @@
                     console.log(error)
                 }
             });
-
         })
 
         // making an AJAX CALL FOR MAKING REPLIES
@@ -101,19 +133,23 @@
             console.log("Reply button was clicked")
         })
 
-        $('.replyform').submit(function(e){
+        $('.reply-button').on('click',function(e){
+            console.log("Submit was clicked")
             e.preventDefault();
-            // var token='{% csrf_token %}'
+            // var token='{{csrf_token}}'
             // console.log(token)
-            var parent_comment_id = $(this).siblings('.comment_id').val();
-            var data=$('.replyform').serialize()+`&snippet_id={{object.id}}&parent_comment_id=${parent_comment_id}`
+            var parent_comment_id = $(this).parent().siblings('.comment_id').val();
+             var parent=$(this).parent('.childs')
+             console.log(parent)
+            var data=`detail=${ $(this).siblings('.reply-detail').val() }&snippet_id={{object.id}}&parent_comment_id=${parent_comment_id}`
             console.log("Parent Comment id is ",parent_comment_id)
             $.ajax({
                 method:'post',
-                url:'{% url "add_comment" %}',
+                url:'{% url "add_reply" %}',
                 data:data,
                 success:function(data){ 
-                    $('#comment').load(' #comment')
+                    console.log("Data Was loaded Successfully")
+                    $(parent).children('.childs').load(' .childs')
                 },
                 error:function(error){
                     console.log("Error was encountered")
@@ -121,10 +157,9 @@
                 }
             });
             console.log(data)
-        }) 
+        }
+        ) 
          
-
-
         });
 
 </script>

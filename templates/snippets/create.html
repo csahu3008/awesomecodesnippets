@@ -1,10 +1,94 @@
 {% extends 'base.html' %}
 
 {% block content %}
-CREATE YOUR FAVIORATE SNIPPET
-<form method="POST">
-{{form.as_p}}
-{% csrf_token %}
-<input type='submit' value='create Snippet' />
-</form>
-{% endblock content %}
+
+{% include 'navbar.html' %}
+
+{% block navbar %}
+{% endblock navbar %}
+{% load static %}
+<link href='{% static "css/create.css" %}'  rel='stylesheet' > 
+
+<div class="columns main">
+    <div class="column"></div>
+    <div class="column ">
+        <p class='is-size-4 has-text-primary'>
+            CREATE A SNIPPET
+        </p>
+
+        <div>
+            {% if form.errors %}
+            {% for field in form %}
+        {% for error in field.errors %}
+        <div >
+            <p class="has-text-white" style="font-size: 13px;">{{ error|escape }}</p>
+        </div>
+        {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+        <div >
+            <p style="font-size: 13px;" class="has-text-white">{{ error|escape }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        </div>
+
+
+        <form method="POST">
+            <div class="field ">
+            <label class="label">Title</label>
+            <div class="control">
+                {{form.title}}
+            </div>
+            <p class="help">Enter The title</p>
+        </div>
+        
+        <div class="field">
+            <label class="label">language</label>
+            <div class="control">
+            {{form.language}}
+        </div>
+        <p class="help">Choose programming language</p>
+    </div>
+    
+    <div class="field">
+        <label class="label">style</label>
+        <div class="control">
+            {{form.style}}
+        </div>
+        <p class="help">Choose your faviorate style</p>
+    </div>
+    
+    
+    <div class="field">
+        <label class="label">tags</label>
+        <div class="control">
+            {{form.tags}}
+        </div>
+        <p class="help">Enter the tags seperated by space</p>
+    </div>
+    
+    <div class="field">
+        <label class="label">Description</label>
+        <div class="control">
+            {{form.description}}
+        </div>
+        <p class="help">Describe </p>
+    </div>
+    
+    <div class="field">
+        <label class="label">Code</label>
+        <div class="control">
+            {{form.code}}
+        </div>
+        <p class="help">write your code snippet here</p>
+      </div>
+      {{form.media}}
+      {% csrf_token %}
+      <input type='submit' class="is-success button" value='Add Snippet' />
+    </form>
+    </div>
+     <div class="column"></div>
+</div>
+
+    {% endblock content %} 

@@ -15,9 +15,11 @@ from tagging.fields import TagField
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
+from ckeditor.fields import RichTextField
 
 class CustomUser(AbstractUser):
     name=models.CharField(_("Name"),max_length=200)
+    
     
     def natural_key(self):
         return (self.name,self.email,self.id)
@@ -29,10 +31,10 @@ class Snippet(models.Model):
     title=models.CharField(max_length=500)
     # language=models.ForeignKey(Language,on_delete=models.CASCADE)
     coder=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    description=models.TextField()
-    description_html=models.TextField()
+    description=RichTextField(blank=True,null=True)
+    description_html=models.TextField(editable=False)
     code=models.TextField()
-    highlighted_code=models.TextField()
+    highlighted_code=models.TextField(editable=False)
     tags=TagField()
     publication_date=models.DateTimeField(editable=False)
     updated_date=models.DateTimeField(editable=False)

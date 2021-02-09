@@ -1,48 +1,276 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load static %}
+{% load humanize %}
+<link href='{% static "css/home.css" %}'  rel='stylesheet' > 
 
-<h1>HOME PAGE</h1>
 
-{{message}}
-<h2>Latest Snippets </h2>
-{% for obj in latest %}
-      {{obj.title}}
-{% endfor %}
-<h2>Top Contributers </h2>
+<div class="background">
+   
+   <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="{% url 'home' %}">
+          <img src="{% static 'img/icon.svg' %}" width="300" height="100" style="background-position: center;"> 
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+    
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-end">
+         
+         <a class="navbar-item" href='{% url "create_snippet" %}'>
+            Add Snippet
+          </a>
+         
+          <a class="navbar-item" href='#content-section'>
+             Explore Snippets
+          </a>
 
-{% for obj in top_contributers %}
-<p>
-   {{obj.email}} has conrtibuted  {{obj.score}} snippets
-   See Profile
-   <a href="random">click here</a>
-</p>     
-   {% endfor %}
+          <div class="navbar-item">
+            <div class="buttons">
+              {% if user.is_authenticated %}
+                    <div class="dropdown is-right menu">
+                      <div class="dropdown-trigger">
+                        <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu6">
+                          <span>{{user.name|default:"NA"}}</span>
+                          <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                          </span>
+                        </button>
+                      </div>
+                      <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                          
+                          
+                          <a href="{% url 'list_snippet' %}" class="dropdown-item">
+                              All Snippets
+                          </a>
 
-<h2>Top Languages </h2>
+                          <a href="{% url 'my_snippet' %}" class="dropdown-item">
+                              My Snippets
+                          </a>
+                          <a href='{% url "account_change_password" %}' class="dropdown-item">
+                              Change Password
+                          </a>
+                        
+                          <a href="{% url 'bookmark' %}" class="dropdown-item">
+                              My Bookmarks
+                          </a>
+                        
+                        </div>
+                      </div>
+                    </div>
 
-{% for lang,count in total_langs %}
-
-{% if not count == 0 or forloop.counter0 < 10 %}
-<div>
-      <p>  {{lang}} ( {{count}} ) snippets </p>
-      <a href='{% url "detail_lang" lang %}'> See Articles from {{lang}} </a>
-      <input type="hidden" value="{{lang}}" disabled />
+                  <a class="button is-light" href="{% url 'account_logout' %}">
+                    Logout
+                  </a>
+             {% else %}
+                    <a class="button is-primary" href="{% url 'account_signup' %}">
+                      <strong>Sign up</strong>
+                    </a>
+                    <a class="button is-light" href="{% url 'account_login' %}">
+                      Log in
+                    </a>
+             {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+   
+   
+   <!-- <img src="{% static 'img/wave.svg' %}" class="getsvg" > -->
+   <object type="image/svg+xml" data="{% static 'img/main_coder.svg' %}" class="coder">
+      <img src="{% static 'img/main_coder (1).svg' %}" class='coder' />
+   </object>
+   
+   <div class="cpp-snippet">
    </div>
-      {% endif %}
-   {% endfor %}
+   
+   <div class="java-snippet">
+   </div>
+   
+   <div class="columns web-info">
+      <div class="column">
+         <article class="message is-success" style="border-radius:100px !important;">
+            <div class="message-body message-info title has-text-danger is-4">
+               "A place where you can publish your faivorate code snippet and let others learn from your code."
+            </div>
+          </article>
+      </div>
+      <div class="column"></div>
+      <div class="column"></div>
+      <div class="column"></div>
+    </div>
+  </div>
+  
+  <div class="content-section" id='content-section'>
+    <div >
+      <svg class="my-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path fill="#fff" fill-opacity="1" d="M0,96L120,128C240,160,480,224,720,229.3C960,235,1200,181,1320,154.7L1440,128L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z"></path>
+      </svg>
+      <!-- <img src="{% static 'img/blob.svg' %}" class="blob" alt=""> -->
+    </div>
+    <div class="div1 ">
+      
+      <div class="card  block">
+        <!-- <div class="card-image">
+          <figure class="image is-4by3">
+            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+          </figure>
+        </div> -->
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img src="{% static 'img/new.svg' %}" alt="Placeholder image">
+                
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4">Latest Snippets</p>
+            </div>
+          </div>
+          
+          <div class="content">
+            {% for obj in latest %}
+            
+            <div class="card">
+              <div class="card-content">
+                <div class="content">
+                    <div>
+                      <a href="{% url 'detail_snippet' obj.id %}">  {{obj.title}}</a>
+                    </div>   
+               <div>by - ({{obj.coder.email}}) : {{obj.publication_date|naturaltime}}</div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+             No Snippets yet
+              {% endfor %}
+          </div>
+          
+          
+        </div>
+      </div>
+    </div>
+  
+ 
+  <div class="div2">
+
+    <div class="card block1">
+      <!-- <div class="card-image">
+        <figure class="image is-4by3">
+          <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+        </figure>
+      </div> -->
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-48x48">
+              <img src="{% static 'img/top-three.svg' %}" alt="Placeholder image">
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4">Top Contributers</p>
+            <p class="subtitle is-6"></p>
+          </div>
+        </div>
+        
+        <div class="content">
+         
+        {% for obj in top_contributers %}
+        <div class="box">
+          {{obj.email}} has conrtibuted  {{obj.score}} snippets
+          See Profile
+          <a href='{% url "user_detail" obj.id %}'>click here</a>
+        </div>     
+
+        {% empty %}
+        No Snippets yet
+          {% endfor %}
+        </div>
+        
+        
+      </div>
+    </div>
 
 
+  </div>
+  <div class="div3">
 
-{% if user.is_authenticated %}
-   Hello {{user.email}}
- <p> <a href="{% url 'account_logout' %}" >Logout</a></p>
+    <div class="card block">
+      <!-- <div class="card-image">
+        <figure class="image is-4by3">
+          <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+        </figure>
+      </div> -->
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-48x48">
+              <img src="{% static 'img/coding.svg' %}" alt="Placeholder image">
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4">Top Languages</p>
+            <p class="subtitle is-6"></p>
+          </div>
+        </div>
+        
+        <div class="content">
+          {% for lang,count in total_langs %}
 
-{% else %}
-    Hello Annoynymus
-   <a href="{% url 'account_login' %}" >Login</a>
+          {% if not count == 0 or forloop.counter0 < 10 %}
+        <div class="box">
+              <p>  {{lang}} ( {{count}} ) snippets </p>
+              <a href='{% url "detail_lang" lang %}'> See Articles from {{lang}} </a>
+              <input type="hidden" value="{{lang}}" disabled />
+          </div>
+              {% endif %}
+            
+              {% empty %}
+              No Snippets yet
+          {% endfor %}
+      
+        </div>
+        
+        
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
-   {% endif %}
+<section class="hero is-medium is-bold" style="background-color:#0C1446">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title has-text-white">
+        <!-- Footer -->
+      </h1>
+    </div>
+  </div>
+  <div class="hero-footer">
+    <div class="has-text-white">Icons made by <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>, <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    
+  </div>
+</section>
+
+<script>
+   $(document).ready(function () {
+       $('.menu').hover(function(){
+         $(this).toggleClass('is-active')
+
+       })
+   });
+</script>
+
+
 
 {% endblock content %}

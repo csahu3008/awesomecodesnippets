@@ -1,0 +1,30 @@
+body{
+    width:100%;
+    min-height:100vh;
+    background: #41295a;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #2F0743, #41295a);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #2F0743, #41295a); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+}
+
+.main-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  margin-top: 20px;
+}
+
+
+.my-cards:hover{
+   background:#f5f5f5;
+}
+
+.card{
+  width: 600px !important;
+}
+
+.card-footer-item:hover,.pagination-previous,.pagination-next{
+  background:black;
+  color:white;
+}

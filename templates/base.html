@@ -6,13 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+    <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
 
     <title>AWESOME CODE SNIPPETS </title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
+<style>
+    
+    .my-messages{
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top:0px;
+        padding:10px;
+        left:40%;
+        border-bottom: 3px solid blue;
+        background-color:rgb(0, 202, 135);
+    }
+</style>
 <body>
+
     {% block content %}
         
     {% endblock content %}
+
+    <div class="my-messages">
+        
+    </div>
+
+<script>
+
+$(document).ready(function(){
+    
+    function messages(msg) {
+                $('.my-messages').html("<h1>"+msg+"</h1>");
+                $('.my-messages').show(200).animate({'top':'150px'},300).fadeIn( 400 ).fadeOut(3000).animate({'top':'0px'});
+        }
+
+
+    });
+
+</script>
 </body>
 </html>

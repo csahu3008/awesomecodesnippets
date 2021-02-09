@@ -1,0 +1,15 @@
+{% extends  'base.html' %}
+
+{% block content %}
+Tag Page
+
+{% if tagged_snippets %}
+    
+    {% for object in tagged_snippets %}
+        Snippet-ID {{object.id}}
+        Snippet-title {{object.title}}
+    {% endfor %}
+
+{% endif %}
+
+{% endblock content %}

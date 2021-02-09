@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+{% include 'navbar.html' %}
+{% block navbar %}
+{% endblock navbar %}
+{% load i18n %}
+{% load account %}
+
+<style>
+section{
+    justify-content: center !important;
+}
+
+.hero{
+    background: url('{% static "img/shapes_1_black.png" %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.main-section{
+   width:50%;
+  margin-left:20%;
+  margin-top:5%;
+  background-color: rgba(59, 56, 56, 0.486);
+  z-index: 1 !important;
+   padding:50px;
+   position: relative;
+  /* border: 2px solid red;  */
+}
+form{
+    padding:30px;
+    display: flex;
+    flex-flow: column;
+}
+.field{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+input[type='email'],input[type='text'],input[type='password']{
+    padding:15px;
+    color:white;
+    height:50px;
+    /* width:400px; */
+    outline: none;
+    border:2px solid orange;
+    background: none;
+    border-radius: 100px;
+}
+input[type='submit']{
+    margin-top: 10px;
+}
+
+
+</style>
+
+<section class="hero  is-fullheight" style="display: block;">
+  <div class="hero-body ">
+      
+    <div class='main-section'>
+        <h1 class="title has-text-danger is-2"> {% trans "Sorry You are not allowed to access this page" %}</h1>
+        
+    </div>
+        
+    </div>
+</div>
+</section>
+
+{% endblock content %}
+
+

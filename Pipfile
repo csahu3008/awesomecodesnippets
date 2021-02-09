@@ -9,6 +9,9 @@ pygments = "==2.7.2"
 django-tagging = "*"
 markdown = "==3.2.1"
 django-allauth = "==0.43.0"
+django-ckeditor = "*"
+whitenoise = "==4.1.4"
+dj-database-url = "==0.5.0"
 
 [dev-packages]
 

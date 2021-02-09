@@ -1,42 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-   <style>
-       .parent{
-           height:400px;
-           width:400px;
-           background-color: grey;
-       }
-       .child1{
-           height:200px;
-           width:200px;
-           background-color: teal;
-       }
-       
-       .child2{
-           height:100px;
-           width:100px;
-           background-color: yellow;
-       }
+{% extends 'base.html' %}
 
-   </style>
-    <div class="parent">
-       <div class="child1">
-           <div class="child2">
+{% block content %}
+{% load static %}
+<link href='{% static "css/home.css" %}'  rel='stylesheet' > 
 
-           </div>
-       </div>
+
+<div class="background">
+   
+   <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="https://bulma.io">
+          <img src="{% static 'img/icon.svg' %}" width="300" height="100" style="background-position: center;"> 
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+    
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-end">
+         
+         <a class="navbar-item">
+            Add Snippet
+          </a>
+         
+          <a class="navbar-item" href='#content-section'>
+             Explore Snippets
+          </a>
+
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary">
+                <strong>Sign up</strong>
+              </a>
+              <a class="button is-light">
+                Log in
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+   
+   
+   <!-- <img src="{% static 'img/wave.svg' %}" class="getsvg" > -->
+   <object type="image/svg+xml" data="{% static 'img/main_coder.svg' %}" class="coder">
+      <img src="{% static 'img/main_coder (1).svg' %}" class='coder' />
+   </object>
+   
+   <div class="cpp-snippet">
    </div>
+   
+   <div class="java-snippet">
+   </div>
+   
+   <div class="columns web-info">
+      <div class="column">
+         <article class="message is-success" style="border-radius:100px !important;">
+            <div class="message-body message-info">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+            </div>
+          </article>
+      </div>
+      <div class="column"></div>
+      <div class="column"></div>
+      <div class="column"></div>
+    </div>
+</div>
 
-   <script>
-       var mydiv=document.querySelectorAll('div');
-       console.log(mydiv)
-       mydiv
-    </script>
-</body>
-</html>
+<div class="content-section" id='content-section'>
+
+</div>
+
+<h1>HOME PAGE</h1>
+
+{{message}}
+
+<h2>Latest Snippets </h2>
+{% for obj in latest %}
+      {{obj.title}}
+{% endfor %}
+<h2>Top Contributers </h2>
+
+{% for obj in top_contributers %}
+<p>
+   {{obj.email}} has conrtibuted  {{obj.score}} snippets
+   See Profile
+   <a href='{% url "user_detail" obj.id %}'>click here</a>
+</p>     
+   {% endfor %}
+
+
+
+   <h2>Top Tags </h2>
+
+   {% for obj in tags %}
+   <p>
+      {{obj.name}} was used {{obj.count}} times
+   </p>     
+      {% endfor %}
+
+
+<h2>Top Languages </h2>
+
+{% for lang,count in total_langs %}
+
+{% if not count == 0 or forloop.counter0 < 10 %}
+<div>
+      <p>  {{lang}} ( {{count}} ) snippets </p>
+      <a href='{% url "detail_lang" lang %}'> See Articles from {{lang}} </a>
+      <input type="hidden" value="{{lang}}" disabled />
+   </div>
+      {% endif %}
+   {% endfor %}
+
+
+
+{% if user.is_authenticated %}
+   Hello {{user.email}}
+ <p> <a href="{% url 'account_logout' %}" >Logout</a></p>
+
+{% else %}
+    Hello Annoynymus
+   <a href="{% url 'account_login' %}" >Login</a>
+
+
+   {% endif %}
+
+{% endblock content %}

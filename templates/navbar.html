@@ -1,0 +1,93 @@
+{% block navbar %}
+
+{% load static %}
+
+
+<nav style="background-color:#fad60c" class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="http://localhost:8000">
+        <img src="{% static 'img/icon.svg' %}" width="300" height="100" style="background-position: center;"> 
+      </a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+  
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-end">
+       
+       <a class="navbar-item" href='{% url "create_snippet" %}'>
+          Add Snippet
+        </a>
+       
+        <a class="navbar-item" href='{% url "home" %}#content-section'>
+           Explore Snippets
+        </a>
+
+        <div class="navbar-item">
+          <div class="buttons">
+            {% if user.is_authenticated %}
+           
+
+            <div class="dropdown is-right menu">
+              <div class="dropdown-trigger">
+                <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu6">
+                  <span>{{user.name|default:"NA"}}</span>
+                  <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+
+              <div class="dropdown-menu" id="dropdown-menu6" role="menu">
+                <div class="dropdown-content">
+                  
+                    <a href="{% url 'list_snippet' %}" class="dropdown-item">
+                              All Snippets
+                          </a>
+
+                  <a href="{% url 'my_snippet' %}" class="dropdown-item">
+                      My Snippets
+                  </a>
+                  <a href='{% url "account_change_password" %}' class="dropdown-item">
+                      Change Password
+                  </a>
+                
+                  <a href='{% url "bookmark" %}' class="dropdown-item">
+                      My Bookmarks
+                  </a>
+                
+                </div>
+              </div>
+            </div>
+
+
+            <a class="button is-light" href="{% url 'account_logout' %}">
+              Logout
+            </a>
+        {% else %}
+              <a class="button is-primary" href="{% url 'account_signup' %}">
+                <strong>Sign up</strong>
+              </a>
+              <a class="button is-light" href="{% url 'account_login' %}">
+                Log in
+              </a>
+       {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    $(document).ready(function () {
+        $('.menu').hover(function(){
+          $(this).toggleClass('is-active')
+ 
+        })
+    });
+ </script>
+
+{% endblock navbar %}

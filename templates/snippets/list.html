@@ -1,10 +1,103 @@
-{% extends 'base.html' %}
+{% extends  'base.html' %}
 {% block content %}
+{% load static %}
+{% load humanize %}
+<link rel="stylesheet" href="{% static 'css/list.css' %}">
 
-{% for object in object_list %}
-<br />
-{{object.id}}
-{{object.title}}
-{{object.highlighted_code}}
-{% endfor %}
+{% include 'navbar.html' %}
+{% block navbar %}
+{% endblock navbar %}
+
+<div class="main-section">
+    <div>
+        {% if request.path == '/snippet/user/' %}
+        <p class='has-text-danger is-centered title' style="text-align: center;">My Snippets</p>
+        
+        {% else %}
+        <p class='has-text-danger is-centered title' style="text-align: center;">All Snippets</p>
+      
+        {% endif %}
+        <div class="snippet-list">
+            
+            {% for object in object_list %}
+
+            <div class="card my-cards" >
+                <div class="card-content">
+                  <p class="title is-4">
+                         {{object.title}}
+                </p>
+                  <p class="subtitle is-6">
+                  by: {{object.coder.email}} |  {{object.publication_date|naturaltime}}
+                  </p>
+
+                  <p class="subtitle is-6 has-text-info">
+                    {{object.description_html|safe|truncatechars:50}} 
+                    </p>
+                </div>
+                <footer class="card-footer">
+                  <p class="card-footer-item">
+                    <span>
+                      <a href="{% url 'detail_lang' object.id %}"> see </a>
+                    </span>
+                  </p>
+                  <p class="card-footer-item">
+                    <span>
+                      Share on <a href="#">Twitter</a>
+                    </span>
+                  </p>
+
+                  {% if object.coder == request.user %}
+                  <p class="card-footer-item">
+                    <span>
+                        <a href="{% url 'update_snippet' object.pk %}">Edit</a> |
+                        <a href="{% url 'delete_snippet' object.pk %}">Delete</a>
+                    </span>
+                </p>
+                {% endif %}
+
+
+                </footer>
+              </div>
+                   
+            <br/>
+            <br/>
+            {% empty %}
+    
+                No Snippets Yet
+            {% endfor %}
+            <br />
+            
+        </div>
+        
+        
+        {% if page_obj.has_other_pages %}
+        <nav class="pagination is-right is-rounded" role="navigation" aria-label="pagination">
+            
+            <ul class="pagination-list is-current">
+                <li>
+                    <a class="pagination-link is-current  " aria-label="Page 1" aria-current="page">
+                        {{page_obj.number}}
+                    </a>
+                </li>
+            </ul>
+            
+            {% if page_obj.has_previous %}
+            <a class="pagination-previous has-text-white" title="This is the first page" href="?page={{page_obj.previous_page_number}}" >Previous</a>
+            {% else %}
+            <a class="pagination-previous has-text-white" title="This is the first page" disabled>Previous</a>
+            {% endif %}
+            
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{page_obj.next_page_number}}" class="pagination-next has-text-white">Next page</a>
+            {% else %}
+            <a  class="pagination-next has-text-white" disabled >Next page</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+        </div>
+    </div>
+    
+
+
 {% endblock content %}
