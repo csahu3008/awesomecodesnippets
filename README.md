@@ -1,9 +1,11 @@
 # awesomecodesnippets
 A project where you can add your faviourate code snippet and let others use it.and you can also use it as code blog website
-here are some of the screenshots of the project
 
 it is created using 
 ## HTML CSS JS DJANGO
+
+# here are some of the screenshots of the project
+
 
 ## front page ui
 ![alt text](https://github.com/csahu3008/awesomecodesnippets/blob/main/1.png?raw=true)
