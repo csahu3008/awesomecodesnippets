@@ -3,4 +3,6 @@
 */__pycache__/*
 .env
 .venv
-*
+**/*/migrations/*
+*.pyc
+__pycache__/
