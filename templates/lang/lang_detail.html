@@ -1,4 +1,4 @@
-{% extends  'base.html' %}
+{% extends 'base.html' %}
 
 
 {% block content %}
@@ -11,81 +11,90 @@
 {% endblock navbar %}
 
 <div class="main-section">
-    <div>
-        <p class='has-text-white is-centered title' style="text-align: center;">Language Details</p>
-        <div class="lang-detail">
-            
-            <p class='title has-text-white is-5'>Language : {{lang}} </p>
-            <p class='title has-text-white is-5'>Total snippets : {{total_snippets}} </p>
-            
-            {% for object in lang_snippets %}
-              
-            
-            <div class="card my-cards" >
-                <div class="card-content">
-                  <p class="title is-4">
-                         {{object.title}}
-                </p>
-                  <p class="subtitle is-6">
-                  by: {{object.coder.email}} |  {{object.publication_date|naturaltime}}
-                  </p>
-                  <p class="subtitle is-6 has-text-info">
-                    {{object.description_html|safe|truncatechars:50}} 
-                    </p>
-                </div>
-                <footer class="card-footer">
-                  <p class="card-footer-item">
-                    <span>
-                      <a href="{% url 'detail_lang' object.id %}"> see </a>
-                    </span>
-                  </p>
-                  <p class="card-footer-item">
-                    <span>
-                      Share on <a href="#">Twitter</a>
-                    </span>
-                  </p>
-                </footer>
-              </div>
-                   
-            <br/>
-            <br/>
-            {% empty %}
-    
-                No Snippets Yet
-            {% endfor %}
-            <br />
-            
-        </div>
-        
-        
-        {% if lang_snippets.has_other_pages %}
-        <nav class="pagination is-right is-rounded" role="navigation" aria-label="pagination">
-            
-            <ul class="pagination-list is-current">
-                <li>
-                    <a class="pagination-link is-current  " aria-label="Page 1" aria-current="page">
-                        {{lang_snippets.number}}
-                    </a>
-                </li>
-            </ul>
-            
-            {% if lang_snippets.has_previous %}
-            <a class="pagination-previous has-text-white" title="This is the first page" href="?page={{lang_snippets.previous_page_number}}" >Previous</a>
-            {% else %}
-            <a class="pagination-previous has-text-white" title="This is the first page" disabled>Previous</a>
+  <div>
+    <p class='has-text-danger is-centered title' style="text-align: center;">Language Details</p>
+    <p class='title has-text-white is-5'>Language : {{lang}} </p>
+    <p class='title has-text-white is-5'>Total snippets : {{total_snippets}} </p>
+    <div class="snippet-list">
+      <div class="snippet-grid">
+        {% for object in lang_snippets %}
+        <div class="card my-cards">
+          <div class="card-content">
+            <p class="title is-5 has-text-dark">{{ object.title }}</p>
+            <p class="subtitle is-7 has-text-grey">
+              by: {{ object.coder.email }} | {{ object.publication_date|naturaltime }}
+            </p>
+            <p class="subtitle is-6 has-text-info truncate-text">
+              {{ object.description_html|safe|truncatechars:120 }}
+            </p>
+          </div>
+          <footer class="card-footer">
+            <p class="card-footer-item">
+              <a href="{% url 'detail_snippet' object.id %}">View</a>
+            </p>
+            {% if object.coder == request.user %}
+            <p class="card-footer-item">
+              <a href="{% url 'update_snippet' object.pk %}">Edit</a> &nbsp;|&nbsp;
+              <a href="{% url 'delete_snippet' object.pk %}">Delete</a>
+            </p>
+
+
+
             {% endif %}
-            
-            
-            {% if lang_snippets.has_next %}
-            <a href="?page={{lang_snippets.next_page_number}}" class="pagination-next has-text-white">Next page</a>
-            {% else %}
-            <a  class="pagination-next has-text-white" disabled >Next page</a>
-            {% endif %}
-        </nav>
-        {% endif %}
+            <!-- Twitter Share -->
+            <p class="card-footer-item share-links">
+              <a href="https://wa.me/?text={{ object.title|urlencode }} - Check out this code snippet on AwesomeCodeSnippets! {{ object.get_absolute_url|urlencode }}"
+                target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-whatsapp fa-lg" style="color: #63E6BE;"></i>
+              </a>
+              <a href="https://twitter.com/intent/tweet?text={{ object.title|urlencode }} - Check out this code snippet on AwesomeCodeSnippets! {{ request.scheme }}://{{request.get_host}}/{{ object.get_absolute_url|urlencode }}"
+                target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-twitter fa-lg" style="color: #74C0FC;"></i>
+              </a>
+            </p>
+          </footer>
         </div>
+        {% empty %}
+        <div class="notification is-warning has-text-centered">
+          No Snippets Yet
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    
+    <br />
+
+  </div>
+
+
+  {% if lang_snippets.has_other_pages %}
+  <nav class="pagination is-right is-rounded" role="navigation" aria-label="pagination">
+
+    <ul class="pagination-list is-current">
+      <li>
+        <a class="pagination-link is-current  " aria-label="Page 1" aria-current="page">
+          {{lang_snippets.number}}
+        </a>
+      </li>
+    </ul>
+
+    {% if lang_snippets.has_previous %}
+    <a class="pagination-previous has-text-white" title="This is the first page"
+      href="?page={{lang_snippets.previous_page_number}}">Previous</a>
+    {% else %}
+    <a class="pagination-previous has-text-white" title="This is the first page" disabled>Previous</a>
+    {% endif %}
+
+
+    {% if lang_snippets.has_next %}
+    <a href="?page={{lang_snippets.next_page_number}}" class="pagination-next has-text-white">Next page</a>
+    {% else %}
+    <a class="pagination-next has-text-white" disabled>Next page</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+</div>
+</div>
+
 
 
 

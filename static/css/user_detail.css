@@ -1,31 +1,101 @@
 body{
-    width:100%;
-    min-height:100vh;
-    background: #C33764;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-color: black;
+  }
+  
+  .main-section{
+    padding:20px;
+    min-height: 100vh;
+  }
+  
+  .my-cards:hover{
+     background:#f5f5f5;
+  }
+  .snippet-grid{
+    display: flex;
+    gap:20px;
+    flex-direction: column;
+  }
+  .card{
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-footer-item:hover,.pagination-previous,.pagination-next{
+    background:black;
+    color:white;
+  }
+  
+  .share-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  /* Custom Responsive Grid */
+  @media (min-width: 564px) {
+    .snippet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+      grid-gap: 24px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .snippet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-gap: 24px;
+    }
+  }
+  
+  .my-cards {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .my-cards:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .truncate-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* 3 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-footer{
+  margin-top:auto;
+  }
+  .card-footer a {
+    color: #3273dc;
+    font-weight: 500;
+  }
+  
+  .card-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .snippet-list {
+    padding: 16px;
+  }
+  
+  @media (min-width: 1024px) {
+    .snippet-list {
+      padding:32px 64px;
+    }
+  }
 
-
-}
-
-.main-section{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  margin-top: 20px;
-}
-
-
-.my-cards:hover{
-   background:#f5f5f5;
-}
-
-.card-footer-item:hover,.pagination-previous,.pagination-next{
-  background:black;
-  color:white;
-}
-.card{
-  width: 600px !important;
-}
-
+  /* styles related to user profile */
+  .user_detail{
+    background: transparent;
+    margin: 0 auto;
+    
+  }
+  @media (min-width: 1024px) {
+    .user_detail {
+      padding:32px 64px;
+    }
+    
+  }

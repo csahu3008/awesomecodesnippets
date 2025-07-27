@@ -1,3 +1,4 @@
+{% load humanize %}
 
 {% block comments %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -7,10 +8,8 @@
         /* border:2px solid gold; */
         margin: 5px;
         padding:5px;
-        margin-left:40px;
     }
     .comment-title{
-            font-family: 'fira code';
             font-size: large;
             color:blue;
         }
@@ -18,28 +17,45 @@
         .commentform {
             display: flex;
             align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 600px;
         }
 
         .commentform > textarea{
             border: 1px solid blue;
             background-color: transparent;
             padding:5px 10px;
-            width:300px;
+            width:100%;
             font-size: 20px;
-            height: 60px;
-            border-radius: 20px;
+            height: 80px;
+            border-radius: 8px;
             outline: none;
         }
         .commentform > button{
             width:100px;
-            margin-left: 30px;
             height:40px;
             font-size: medium;
             background-color: blue;
             color: white;
+            align-self: right;
             outline: none;
+            margin-left: auto;
             border: none;
-            border-radius: 10px;
+            border-radius: 5px;
+        }
+        .user{
+            color:blue;
+            font-weight: bold;
+        }
+        .time{
+         font-size: 12px;
+         color:gray;   
+        }
+        .message{
+            margin-top: 5px;
+            border-left: 2px solid gray;
+            padding:5px 5px 5px 10px;
         }
 
 </style>
@@ -56,8 +72,12 @@
 <div class="comment" id='comment'>
     {% for comment in comments %}
     <div class="co">
-        {{comment.detail|safe}} 
-        {{comment.date_commented}}
+        <span class="user">{{comment.user.username | title}}</span>
+        <span class="time">@ {{comment.date_commented | naturaltime}}</span>
+        <br />
+        <p class="message">
+            {{comment.detail|safe}} 
+        </p>
         <input class='comment_id' type='hidden' value='{{comment.id}}'>
         <button class="individual button is-warning">Read All replies</button>
         <div class='childs'></div>
@@ -93,6 +113,7 @@
                 method:'post',
                 url:'{% url "add_comment" %}',
                 data:data,
+
                 success:function(data){ 
                     $('#comment').load(' #comment')
                 },

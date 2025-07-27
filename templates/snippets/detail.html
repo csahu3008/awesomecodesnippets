@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,26 +9,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
     <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
-    <link href="{% static 'css/mystyle.css' %}" id='main_style' rel='stylesheet' >
-    <link href="{% static 'css/detail.css' %}" id='main_style' rel='stylesheet' >
+    <link href="{% static 'css/mystyle.css' %}" id='main_style' rel='stylesheet'>
+    <link href="{% static 'css/detail.css' %}" id='main_style' rel='stylesheet'>
     <script src="{% static 'js/canvas.min.js' %}"> </script>
     <script src="{% static 'js/filesaver.js' %}"> </script>
     <title>AWESOME CODE SNIPPETS </title>
-    
+
 </head>
 <style>
+    .my-messages {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0px;
+        padding: 10px;
+        left: 40%;
+        border-bottom: 3px solid blue;
+        background-color: rgb(0, 202, 135);
+        animation: pulse-animation 2s infinite;
+        border-radius: 50px;
+        background: black;
+        color: white;
+        font-size: 14px;
+        box-shadow: 22px 22px 45px #bebebe,
+            -22px -22px 45px #ffffff;
+    }
 
-    .my-messages{
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    top:0px;
-    padding:10px;
-    left:40%;
-    border-bottom: 3px solid blue;
-    background-color:rgb(0, 202, 135);
-} 
+    @keyframes pulse-animation {
+        0% {
+            box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+        }
+
+        100% {
+            box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
+        }
+    }
 </style>
+
 <body>
 
     <div class="my-messages">
@@ -35,7 +53,7 @@
 
     {% load static %}
     {% load humanize %}
-        
+
     {% include 'navbar.html' %}
 
     {% block navbar %}
@@ -45,54 +63,58 @@
 
         <div class="title-section">
             <div class="title has-text-info">{{object.title}}</div>
-   
-            <div>
-                <div class="snip-detail"><p>By : {{object.coder.name|default:"NA"}} </p> 
+
+            <div class="short-section">
+                <div class="snip-detail">
+                    <p>By : {{object.coder.username|default:"NA"}} </p>
                     <p>Language: {{object.language}} </p>
-                    <p>Date Published: {{object.publication_date|naturaltime}} </p></div>
-            </div>
-            
-            {% if user.is_authenticated  %}
-            <div class="bookmark">
-                
-                {% if bookmark_status == True %}
-                <button id='bookmark' class='remove button is-danger' >Delete Bookmark </button>
-                {% else %}
-                <button id='bookmark' class='add button is-primary' > Add Bookmark </button>
+                    <p>Date Published: {{object.publication_date|naturaltime}} </p>
+                </div>
+
+                {% if user.is_authenticated %}
+                <div class="bookmark  {% if bookmark_status == False %} add {% else %} remove {% endif %}"
+                    id="bookmark">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-bookmark">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                    </svg>
+                    <div class="tooltip">{% if bookmark_status == False %} Add Bookmark {% else %} Remove Bookmark 
+                        {% endif %}</div>
+                </div>
                 {% endif %}
-                
             </div>
-            {% endif %}
+
 
         </div>
-        
+
         <div class="description-section">
-                {{object.description_html|safe}}
+            {{object.description_html|safe}}
         </div>
-        
+
         <div class="code-section">
-            
+
             <div class="options">
                 <span>
                     Style : {{form.style}}
-                </span> 
-    
-                <span>
-                    Dark Mode :  {{form.dark_mode}}
                 </span>
-                
+
+                <span>
+                    Dark Mode : {{form.dark_mode}}
+                </span>
+
                 <span>Line Number: {{form.lines_display}}</span>
                 <span class='download'>Download</span>
-               <span>
-                   Font Size:
-                   <span class="increase " style="font-size:20px;color:red !important;">➕</span>
-                   <span class="decrease">➖</span>
-               </span>
-               <!-- <div class="rate">
+                <span>
+                    Font Size:
+                    <span class="increase" style="font-size:17px;">➕</span>
+                    <span class="decrease">➖</span>
+                </span>
+                <!-- <div class="rate">
                    USEFUL !
                 </div> -->
             </div>
-            
+
             <div class="code">
                 {{object.highlighted_code|safe}}
             </div>
@@ -103,30 +125,30 @@
             {{object.tags}}
             {% endif %}
         </div>
-        
+
 
         <div class="comment-section" id="comment_section">
-            
-        {% if user.is_authenticated  %}
+
+            {% if user.is_authenticated %}
             {% include 'snippets/comments.html' %}
             {% block comments %}
             {% endblock comments %}
-        {% else %}
-         <a href="{% url 'account_login' %}"> Login </a>to see the comments 
-        {% endif %}
+            {% else %}
+            <a href="{% url 'account_login' %}"> Login </a>to see the comments
+            {% endif %}
         </div>
 
     </div>
-    
- 
-   
-    
-   
-    
+
+
+
+
+
+
 
     <!-- <div class='download'>Download</div> -->
-    
-    
+
+
     <!-- {% for t in object.tags %}
         {{t}}
     {% endfor %}
@@ -134,162 +156,171 @@
 
 
 
-    
-    
+
+
     <script>
 
-        
-        
-        $(document).ready(function(){
-            
+
+
+        $(document).ready(function () {
+
             function messages(msg) {
-                    $('.my-messages').html("<h1>"+msg+"</h1>");
-                    $('.my-messages').show(200).animate({'top':'150px'},300).fadeIn( 400 ).fadeOut(3000).animate({'top':'0px'});
-            }
-        
-    var table_class_name='.'+`{{object.style}}`+"table";
-    
-    $(table_class_name).css({'padding':"10px 50px 10px 30px"});
-
-    function freshStyle(stylesheet){
-        $('#main_style').attr('href',stylesheet);
-    }
-    
-    $('.style').change((e)=>{
-        e.preventDefault(); 
-        var value=$('.style').val();
-        $.ajax({url:`{% url 'change_style' %}`,data:{"style":value } ,success:()=>
-        { 
-        event.preventDefault();
-        var restyled = '{% static "css/mystyle.css" %}'+'?v='+Math.random(0,10000); 
-        freshStyle(restyled);
-
-         },error:()=>{
-            console.log("Error")
-        } })
-
-    })
-
-        $('.dark_mode').change((e)=>{
-            // e.preventDefault();
-            var value=$('.dark_mode').prop("checked") ;
-            if(value==true){
-                $(table_class_name).addClass('dark_mode');
-                $('pre').addClass('dark_pre');
-                $('.code').addClass('dark');
-            }else{
-                $(table_class_name).removeClass('dark_mode');
-                $('pre').removeClass('dark_pre');
-                $('.code').removeClass('dark');
-            }
-        })
-
-
-        $('.lines_display').change((e)=>{
-            // e.preventDefault();
-            var value=$('.lines_display').prop("checked") ;
-            if(value==true){
-                $('.linenos').addClass('hide_lines');
-            }else{
-                $('.linenos').removeClass('hide_lines');
-            }
-        })
-       
-
-
-        $('.increase').click((e)=>{
-            var font_size=$(table_class_name).css('font-size');
-            font_size=font_size.substring(0,font_size.length-2);
-
-            if(parseInt(font_size)<30){
-                
-                $(table_class_name).css('font-size',`${parseInt(font_size)+1}px`);
-            }
-  
-        }) ;
-
-        $('.decrease').click((e)=>{
-            var font_size=$(table_class_name).css('font-size');
-            font_size=font_size.substring(0,font_size.length-2);
-            if(parseInt(font_size)>12){
-                    $(table_class_name).css('font-size',`${parseInt(font_size)-1}px`);
+                $('.my-messages').html("<h1>" + msg + "</h1>");
+                $('.my-messages').show(200).animate({ 'top': '150px' }, 300).fadeIn(400).fadeOut(3000).animate({ 'top': '0px' });
             }
 
-        });
+            var table_class_name = '.' + `{{object.style}}` + "table";
 
+            $(table_class_name).css({ 'padding': "10px 50px 10px 30px" });
 
-        $('.download').click(()=>{
-            html2canvas(document.querySelector(table_class_name),{scrollY: -window.scrollY}).then(canvas => {
-                canvas.toBlob(function(blob) {
-                    saveAs(blob, "Dashboard.png"); 
-                })
+            function freshStyle(stylesheet) {
+                $('#main_style').attr('href', stylesheet);
+            }
 
-            });
-        })
-     
-        
-            $('#bookmark').click(function(){
-                var check=$("#bookmark").hasClass('add');
-                if(check==true){
-                    // make ajax call for add 
-                    $('#bookmark').toggleClass('remove add')
-                    $('#bookmark').removeClass('is-primary')
-                    $('#bookmark').addClass('is-danger')
-                    $('#bookmark').text('Delete Bookmark')
-                //   make AJAX calls
-                    $.ajax({
-                    method:'post',
-                    url:'{% url "add_bookmark" %}',
-                    data:{"snippet_id": '{{object.id}}' },
-                    success:function(data){ 
-                    },
-                    error:function(error){
-                        messages("Successfully Bookmarked");
+            $('.style').change((e) => {
+                e.preventDefault();
+                var value = $('.style').val();
+                $.ajax({
+                    url: `{% url 'change_style' %}`, data: { "style": value }, success: () => {
+                        event.preventDefault();
+                        var restyled = '{% static "css/mystyle.css" %}' + '?v=' + Math.random(0, 10000);
+                        freshStyle(restyled);
 
-                        // console.log(error)
+                    }, error: () => {
+                        console.log("Error")
                     }
                 })
-                }else{
+
+            })
+
+            $('.dark_mode').change((e) => {
+                // e.preventDefault();
+                var value = $('.dark_mode').prop("checked");
+                if (value == true) {
+                    $(table_class_name).addClass('dark_mode');
+                    $('pre').addClass('dark_pre');
+                    $('.code').addClass('dark');
+                } else {
+                    $(table_class_name).removeClass('dark_mode');
+                    $('pre').removeClass('dark_pre');
+                    $('.code').removeClass('dark');
+                }
+            })
+
+
+            $('.lines_display').change((e) => {
+                // e.preventDefault();
+                var value = $('.lines_display').prop("checked");
+                if (value == true) {
+                    $('.linenos').addClass('hide_lines');
+                } else {
+                    $('.linenos').removeClass('hide_lines');
+                }
+            })
+
+
+
+            $('.increase').click((e) => {
+                var font_size = $(table_class_name).css('font-size');
+                font_size = font_size.substring(0, font_size.length - 2);
+
+                if (parseInt(font_size) < 30) {
+
+                    $(table_class_name).css('font-size', `${parseInt(font_size) + 1}px`);
+                }
+
+            });
+
+            $('.decrease').click((e) => {
+                var font_size = $(table_class_name).css('font-size');
+                font_size = font_size.substring(0, font_size.length - 2);
+                if (parseInt(font_size) > 12) {
+                    $(table_class_name).css('font-size', `${parseInt(font_size) - 1}px`);
+                }
+
+            });
+
+
+            $('.download').click(() => {
+                html2canvas(document.querySelector(table_class_name), { scrollY: -window.scrollY }).then(canvas => {
+                    canvas.toBlob(function (blob) {
+                        saveAs(blob, "Dashboard.png");
+                    })
+
+                });
+            })
+
+            $('#bookmark').mouseover(function () {
+                $('.tooltip').addClass('show');
+            })
+            $('#bookmark').mouseleave(function () {
+                $('.tooltip').removeClass('show');
+            })
+
+            $('#bookmark').click(function () {
+                var check = $("#bookmark").hasClass('add');
+                var tooltip = $(".tooltip");
+                var bookmark_status = "{{bookmark_status|safe}}";
+
+                if (check == true) {
+                    // make ajax call for add 
+                    $('#bookmark').toggleClass('remove add')
+                    //   make AJAX calls
+                    $.ajax({
+                        method: 'post',
+                        url: '{% url "add_bookmark" %}',
+                        data: { "snippet_id": '{{object.id}}' },
+                        success: function (data) {
+                        },
+                        error: function (error) {
+                            tooltip[0].innerHTML = 'Remove Bookmark'
+                            messages("Successfully Bookmarked");
+                            // console.log(error)
+                        }
+                    })
+                } else {
                     // make ajax call for delete
 
                     $('#bookmark').toggleClass('add remove')
-                    $('#bookmark').removeClass('is-danger')
-                    $('#bookmark').addClass('is-primary')
-                    $('#bookmark').text('Add Bookmark')
                     $.ajax({
-                    method:'post',
-                    url:'{% url "delete_bookmark" %}',
-                    data:{"snippet_id": '{{object.id}}' },
-                    success:function(data){ 
+                        method: 'post',
+                        url: '{% url "delete_bookmark" %}',
+                        data: { "snippet_id": '{{object.id}}' },
+
+                        success: function (data) {
+                            console.log("Successful attempt")
                         },
-                    error:function(error){
-                        messages("Bookmark removed");
-   
+
+                        error: function (error) {
+                            tooltip[0].innerHTML = 'Add Bookmark'
+                            messages("Bookmark removed");
+
+                        }
+                    })
+
+                }
+
+            })
+
+
+            $('.rate').on('click', function () {
+                console.log("FUnction was clikd ")
+                $.ajax({
+                    method: 'post',
+                    url: '{% url "rating" %}',
+                    data: { "snippet_id": '{{object.id}}', 'point': 1 },
+                    success: function (data) {
+                        console.log("Successful attempt")
+                    },
+                    error: function (err) {
+                        console.log("Error Attempt")
                     }
                 })
-    
-                }
-               
             })
 
-
-        $('.rate').on('click',function(){
-            console.log("FUnction was clikd ")
-            $.ajax({
-                method:'post',
-                url:'{% url "rating" %}',
-                data:{"snippet_id":'{{object.id}}','point':1},
-                success:function(data){
-                    console.log("Successful attempt")
-                },
-                error:function(err){
-                    console.log("Error Attempt")
-                }
-            })
-        })
-
-});
-</script>
+        });
+    </script>
 
 </body>
+
 </html>

@@ -1,18 +1,37 @@
 {% block navbar %}
 
 {% load static %}
+<link href='{% static "css/navbar.css" %}'  rel='stylesheet' > 
 
 
-<nav style="background-color:#fad60c" class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="http://localhost:8000">
-        <img src="{% static 'img/icon.svg' %}" width="300" height="100" style="background-position: center;"> 
+      <a class="navbar-item ct-navbar-img" href="{% url 'home' %}">
+        <img src="{% static 'img/logo.png' %}" width="300" height="100" style="background-position: center;"> 
       </a>
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </a>
+      <div class="mobile-dropdown">
+      
+        <a href="{% url 'list_snippet' %}" class="dropdown-item">
+          All Snippets
+        </a>
+      
+        <a href="{% url 'my_snippet' %}" class="dropdown-item">
+          My Snippets
+        </a>
+        <a href='{% url "account_change_password" %}' class="dropdown-item">
+          Change Password
+        </a>
+      
+        <a href='{% url "bookmark" %}' class="dropdown-item">
+          My Bookmarks
+        </a>
+      
+      </div>
     </div>
   
     <div id="navbarBasicExample" class="navbar-menu">
@@ -34,7 +53,7 @@
             <div class="dropdown is-right menu">
               <div class="dropdown-trigger">
                 <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu6">
-                  <span>{{user.name|default:"NA"}}</span>
+                  <span>{{user.username|default:"NA"}}</span>
                   <span class="icon is-small">
                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                   </span>
@@ -85,7 +104,9 @@
     $(document).ready(function () {
         $('.menu').hover(function(){
           $(this).toggleClass('is-active')
- 
+        })
+        $('.navbar-burger').click(function(){
+          $('.mobile-dropdown').toggleClass('show')
         })
     });
  </script>

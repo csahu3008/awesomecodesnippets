@@ -39,20 +39,21 @@ body{
     padding:10px 20px;
 }
 .middle-part{
-    margin:auto;
+    margin:30px auto;
     width:85% !important;
    /* height: 100vh; */
+   border-radius: 8px;
    background-color: #fff;
 }
 .title-section {
-   margin-left: 50px;
-   padding:20px;
-   
+  padding:20px 0 0 20px; 
+}
+.short-section{
+    display: flex;
+    position: relative;
 }
 .title{
     font-size:35px;
-    font-family: 'fira code';
-
 }
 
 .description-section{
@@ -72,19 +73,17 @@ body{
 .options{
     background-color: black;
     padding:20px;
+    gap:20px;
     color:white;
     display: flex;
-    justify-content:space-evenly;
-    align-items: center;
+    justify-content:flex-start;
+    flex-wrap:wrap ;
+    align-items:flex-start;
 }
 
 .code{
-    /* padding:10px; */
-    font-size:19px !important;
-      /* font-family: 'fira code','Times New Roman', serif; */
    background: #f5f5f5;
-   display: flex;
-   /* justify-content: center; */
+   overflow: auto;
 }
 
 .comment-section{
@@ -99,4 +98,11 @@ body{
 
 .dark{
     background-color: black;
+}
+
+@media screen and (min-width>=1024px) {
+    .title-section{
+        margin-left: 50px;
+        padding:20px;
+    }
 }

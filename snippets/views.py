@@ -52,7 +52,7 @@ class HomePage(TemplateView):
 class ListSnippet(ListView):
     template_name='snippets/list.html'
     model=Snippet
-    paginate_by=3
+    paginate_by=6
     def get_queryset(self):
         if self.request.path=='/snippet/user/' and self.request.user.is_authenticated==True:
             return super().get_queryset().filter(coder=self.request.user)
@@ -176,7 +176,7 @@ class GetLangDetails(TemplateView):
         query=Snippet.objects.select_related('coder').filter(language=kwargs['lang'])
         total=query.count()
         page = self.request.GET.get('page')
-        paginator=Paginator(query,3)
+        paginator=Paginator(query,6)
         
         try:
             context['lang_snippets']= paginator.page(page)
@@ -241,7 +241,6 @@ class UserDetail(UserSnippetsMixin,DetailView):
     template_name='account/user_detail.html'
     context_object_name='user'
     model=CustomUser
-    
     
     def get_context_data(self,**kwargs):
         # print("This was called 1 ")

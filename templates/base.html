@@ -8,21 +8,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
     <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400&display=swap" rel="stylesheet">
     <title>AWESOME CODE SNIPPETS </title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <style>
-    
-    .my-messages{
+   .my-messages {
         display: none;
         position: fixed;
         z-index: 9999;
-        top:0px;
-        padding:10px;
-        left:40%;
+        top: 0px;
+        padding: 10px;
+        left: 40%;
         border-bottom: 3px solid blue;
-        background-color:rgb(0, 202, 135);
+        background-color: rgb(0, 202, 135);
+        animation: pulse-animation 2s infinite;
+        border-radius: 50px;
+        background: black;
+        color: white;
+        font-size: 14px;
+        box-shadow: 22px 22px 45px #bebebe,
+            -22px -22px 45px #ffffff;
+    }
+    @keyframes pulse-animation {
+        0% {
+            box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+        }
+
+        100% {
+            box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
+        }
     }
 </style>
 <body>

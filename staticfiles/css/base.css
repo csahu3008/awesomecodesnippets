@@ -1,6 +1,6 @@
 html {
     --scrollbarBG: #CFD8DC;
-    --thumbBG: #0354eb;
+    --thumbBG: black;
   }
   *::-webkit-scrollbar {
     width: 10px;
@@ -50,5 +50,6 @@ html {
     background:cadetblue;
     flex:0.6;
 } */
-
-
+.ct-navbar-img img{
+  max-height: max-content !important;
+}
