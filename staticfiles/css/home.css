@@ -132,6 +132,9 @@ display: none;
     width: 300px;
     left: 230px;
 }
+.menu.is-active{
+    z-index: 100000;
+}
 
 .hidden-mobile {
     display: none;
@@ -201,3 +204,38 @@ display: none;
     left: 50px;
 }
 }
+
+/* mobile menu */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 999999;
+}
+
+  
+  .mobile-dropdown {
+    display: none;
+  }
+  .mobile-dropdown a{
+    background: white;
+  }
+  
+  .mobile-dropdown.show {
+    display: block;
+    position: absolute;
+    z-index: 1000;
+    top: 100%;
+    width: 100%;
+    background: white;
+    box-shadow:0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .mobile-dropdown {
+        display: none;
+    }
+  
+    .mobile-dropdown.show {
+        display: none;
+    }
+  }
