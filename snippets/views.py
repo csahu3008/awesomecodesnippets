@@ -13,6 +13,7 @@ from pygments.formatters import HtmlFormatter
 from django.http import HttpResponse,JsonResponse
 from awesomecodesnippets.settings import BASE_DIR
 from django.core import serializers
+from django.db.models import Count, Q
 
 from .form import StyleForm
 from django.utils.decorators import method_decorator
@@ -42,11 +43,8 @@ class HomePage(TemplateView):
             languages_and_counts[lang]=count
         languages_and_counts=sorted(languages_and_counts.items(),key=lambda item:item[1],reverse=True)
         context['total_langs']=languages_and_counts[:5]
-            
-        
-        context['tags']=sorted(Tag.objects.usage_for_queryset(Snippet.objects.all(),counts=True,min_count=None),key=lambda x:-x.count)
-        
-        # print(context['tags'])
+        # old config context['tags']=Tag.objects.usage_for_queryset(Snippet.objects.all(),counts=True,min_count=None)
+        # currently working sorted(Tag.objects.usage_for_queryset(Snippet.objects.filter(Q(coder__username='test')),counts=True,min_count=None),key=lambda x:-x.count)
         return context
 
 class ListSnippet(ListView):

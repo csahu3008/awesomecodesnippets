@@ -6,9 +6,9 @@ class CommentAdmin(admin.TabularInline):
     model=Comment
 
 
+@admin.register(Snippet)
 class CustomSnippetAdmin(admin.ModelAdmin):
     inlines=[CommentAdmin,]
 
-admin.site.register(Snippet,CustomSnippetAdmin)
 admin.site.register(Ratings)
 # admin.site.register(Comment)

@@ -3,7 +3,7 @@ from django.shortcuts import reverse
 # formatter ,it knows how to output highloghted code in various formats
 # highlighter it puts everything together to produce highlighted code in various formats
 from markdown import markdown 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from pygments import lexers,formatters,highlight
 from pygments.styles import get_all_styles
 from pygments.lexers import get_all_lexers,get_lexer_by_name
@@ -15,7 +15,7 @@ from tagging.fields import TagField
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 class CustomUser(AbstractUser):
     name=models.CharField(_("Name"),max_length=200)
@@ -31,7 +31,7 @@ class Snippet(models.Model):
     title=models.CharField(max_length=500)
     # language=models.ForeignKey(Language,on_delete=models.CASCADE)
     coder=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    description=RichTextField(blank=True,null=True)
+    description=CKEditor5Field(blank=True,null=True)
     description_html=models.TextField(editable=False)
     code=models.TextField()
     highlighted_code=models.TextField(editable=False)

@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-import os
+import django
+from django.utils.encoding import smart_str
+django.utils.encoding.smart_text = smart_str
+
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qsl
 
@@ -26,13 +29,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^f#8_e49)i7_em$-z_kz61_m1*)zc=zdi6dy*j+jx$wh!iq16g'
-
+SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 
-ALLOWED_HOSTS = ['*','.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*','localhost', '127.0.0.1']
 
 
 # Application definition
@@ -52,7 +54,7 @@ INSTALLED_APPS = [
     'tagging',
     'snippets',
     'comments',
-    'ckeditor'
+    'django_ckeditor_5'
 ]
 
 SITE_ID=1
@@ -60,13 +62,13 @@ SITE_ID=1
 
 # SECURE_BROWSER_XSS_FILTER = True
 # X_FRAME_OPTIONS = 'DENY'
-# SECURE_SSL_REDIRECT = True
-# SECURE_HSTS_SECONDS = 3600
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 # SECURE_CONTENT_TYPE_NOSNIFF = True
-# SESSION_COOKIE_SECURE = True # new
-# CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True # new
+CSRF_COOKIE_SECURE = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # new
 
@@ -77,6 +79,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -94,16 +97,16 @@ AUTH_USER_MODEL='snippets.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS=True
 ACCOUNT_LOGOUT_REDIRECT = 'home'
-ACCOUNT_USERNAME_REQUIRED=False
-ACCOUNT_AUTHENTICATION_METHOD='email'
-ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*']
 ACCOUNT_SESSION_REMEMBER = True 
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE=False
 ACCOUNT_UNIQUE_EMAIL=True
 ACCOUNT_LOGOUT_ON_GET=True
 ACCOUNT_EMAIL_VERIFICATION="none"
 ACCOUNT_FORMS = {'signup': 'snippets.form.MyCustomSignupForm'}
+# changes ck-editor-5
+ACCOUNT_LOGIN_METHODS={'email'}
 
+DEFAULT_AUTO_FIELD='django.db.models.BigAutoField' 
 
 
 TEMPLATES = [
@@ -136,7 +139,7 @@ WSGI_APPLICATION = 'awesomecodesnippets.wsgi.application'
 # }
 
 
-# Replace the DATABASES section of your settings.py with this
+# # Replace the DATABASES section of your settings.py with this
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 DATABASES = {
     'default': {
@@ -190,3 +193,105 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=(str(BASE_DIR.joinpath('static')),)
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # new
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+customColorPalette = [
+        {
+            'color': 'hsl(4, 90%, 58%)',
+            'label': 'Red'
+        },
+        {
+            'color': 'hsl(340, 82%, 52%)',
+            'label': 'Pink'
+        },
+        {
+            'color': 'hsl(291, 64%, 42%)',
+            'label': 'Purple'
+        },
+        {
+            'color': 'hsl(262, 52%, 47%)',
+            'label': 'Deep Purple'
+        },
+        {
+            'color': 'hsl(231, 48%, 48%)',
+            'label': 'Indigo'
+        },
+        {
+            'color': 'hsl(207, 90%, 54%)',
+            'label': 'Blue'
+        },
+    ]
+
+CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
+CKEDITOR_5_FILE_STORAGE = "path_to_storage.CustomStorage" # optional
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': {
+            'items': ['heading', '|', 'bold', 'italic', 'link',
+                      'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
+                    }
+
+    },
+    'extends': {
+        'blockToolbar': [
+            'paragraph', 'heading1', 'heading2', 'heading3',
+            '|',
+            'bulletedList', 'numberedList',
+            '|',
+            'blockQuote',
+        ],
+        'toolbar': {
+            'items': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
+                      'code','subscript', 'superscript', 'highlight', '|', 'codeBlock', 'sourceEditing', 'insertImage',
+                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
+                    'insertTable',
+                    ],
+            'shouldNotGroupWhenFull': 'true'
+        },
+        'image': {
+            'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft',
+                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
+            'styles': [
+                'full',
+                'side',
+                'alignLeft',
+                'alignRight',
+                'alignCenter',
+            ]
+
+        },
+        'table': {
+            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
+            'tableProperties', 'tableCellProperties' ],
+            'tableProperties': {
+                'borderColors': customColorPalette,
+                'backgroundColors': customColorPalette
+            },
+            'tableCellProperties': {
+                'borderColors': customColorPalette,
+                'backgroundColors': customColorPalette
+            }
+        },
+        'heading' : {
+            'options': [
+                { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
+                { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
+                { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
+                { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' }
+            ]
+        }
+    },
+    'list': {
+        'properties': {
+            'styles': 'true',
+            'startIndex': 'true',
+            'reversed': 'true',
+        }
+    }
+}
+
+# Define a constant in settings.py to specify file upload permissions
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated", "any"
