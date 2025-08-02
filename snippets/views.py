@@ -39,16 +39,15 @@ class HomePage(TemplateView):
         languages_and_counts={}
         print(LANGUAGE_CHOICES,"LANGUAGE_CHOICES")
         print(LANGUAGE_CHOICES[0].__dict__,"LANGUAGE_CHOICES[0].__dict__")
-        try:
-            for lang,lang_name in LANGUAGE_CHOICES:
+        for lang,lang_name in LANGUAGE_CHOICES:
+            if lang:
                 count=Snippet.objects.filter(language=lang).count()
                 languages_and_counts[lang]=count
-            languages_and_counts=sorted(languages_and_counts.items(),key=lambda item:item[1],reverse=True)
-            context['total_langs']=languages_and_counts[:5]
-        except Exception as e:
-            print(e,"EXCEPTION")
-            # default values 
-            context['total_langs']=[('c','c'),(1,1)]
+            else:
+                languages_and_counts[lang_name]=0
+        languages_and_counts=sorted(languages_and_counts.items(),key=lambda item:item[1],reverse=True)
+        context['total_langs']=languages_and_counts[:5]
+        print('context',context['total_langs'])
         
         # old config context['tags']=Tag.objects.usage_for_queryset(Snippet.objects.all(),counts=True,min_count=None)
         # currently working sorted(Tag.objects.usage_for_queryset(Snippet.objects.filter(Q(coder__username='test')),counts=True,min_count=None),key=lambda x:-x.count)
