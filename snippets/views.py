@@ -38,7 +38,7 @@ class HomePage(TemplateView):
         
         languages_and_counts={}
         print(LANGUAGE_CHOICES,"LANGUAGE_CHOICES")
-        print(LANGUAGE_CHOICES[0].__dict__,"LANGUAGE_CHOICES[0].__dict__")
+        print(LANGUAGE_CHOICES[0],"LANGUAGE_CHOICES[0].__dict__")
         for lang,lang_name in LANGUAGE_CHOICES:
             if lang:
                 count=Snippet.objects.filter(language=lang).count()
