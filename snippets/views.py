@@ -37,12 +37,17 @@ class HomePage(TemplateView):
         context['top_contributers']=Snippet.get_top_contributers(self)[:5]
         
         languages_and_counts={}
-
-        for lang,lang_name in LANGUAGE_CHOICES:
-            count=Snippet.objects.filter(language=lang).count()
-            languages_and_counts[lang]=count
-        languages_and_counts=sorted(languages_and_counts.items(),key=lambda item:item[1],reverse=True)
-        context['total_langs']=languages_and_counts[:5]
+        try:
+            for lang,lang_name in LANGUAGE_CHOICES:
+                count=Snippet.objects.filter(language=lang).count()
+                languages_and_counts[lang]=count
+            languages_and_counts=sorted(languages_and_counts.items(),key=lambda item:item[1],reverse=True)
+            context['total_langs']=languages_and_counts[:5]
+        except Exception as e:
+            print(e,"EXCEPTION")
+            # default values 
+            context['total_langs']=[('c','c'),(1,1)]
+        
         # old config context['tags']=Tag.objects.usage_for_queryset(Snippet.objects.all(),counts=True,min_count=None)
         # currently working sorted(Tag.objects.usage_for_queryset(Snippet.objects.filter(Q(coder__username='test')),counts=True,min_count=None),key=lambda x:-x.count)
         return context
