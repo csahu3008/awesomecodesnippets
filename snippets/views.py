@@ -37,17 +37,20 @@ class HomePage(TemplateView):
         context['top_contributers']=Snippet.get_top_contributers(self)[:5]
         
         languages_and_counts={}
-        print(LANGUAGE_CHOICES,"LANGUAGE_CHOICES")
-        print(LANGUAGE_CHOICES[0],"LANGUAGE_CHOICES[0].__dict__")
-        for lang,lang_name in LANGUAGE_CHOICES:
-            if lang:
-                count=Snippet.objects.filter(language=lang).count()
-                languages_and_counts[lang]=count
-            else:
-                languages_and_counts[lang_name]=0
-        languages_and_counts=sorted(languages_and_counts.items(),key=lambda item:item[1],reverse=True)
-        context['total_langs']=languages_and_counts[:5]
-        print('context',context['total_langs'])
+        language_counts_qs = (
+            Snippet.objects.values('language')
+            .annotate(count=Count('id'))
+            .order_by('-count')
+        )
+        lang_count_dict = {item['language']: item['count'] for item in language_counts_qs}
+
+        languages_and_counts = []
+        for lang, lang_name in LANGUAGE_CHOICES:
+            count = lang_count_dict.get(lang, 0)
+            languages_and_counts.append((lang, count))
+
+        languages_and_counts.sort(key=lambda x: x[1], reverse=True)
+        context['total_langs'] = languages_and_counts[:5]
         
         # old config context['tags']=Tag.objects.usage_for_queryset(Snippet.objects.all(),counts=True,min_count=None)
         # currently working sorted(Tag.objects.usage_for_queryset(Snippet.objects.filter(Q(coder__username='test')),counts=True,min_count=None),key=lambda x:-x.count)
