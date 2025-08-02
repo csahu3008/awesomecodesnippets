@@ -12,10 +12,9 @@ urlpatterns=[
     path('bookmarks/',BookMarkedSnippets.as_view(),name='bookmark'),
     path('snippet/top_contributers/',TopContributers.as_view(),name='contributer'),
     path('languages/',TopLanguages.as_view(),name='languages'),
-    re_path('^mystyle/',MyStyleFile.as_view(),name='change_style'),
-    re_path('^language/detail/(?P<lang>[\w+]+)/',GetLangDetails.as_view(),name='detail_lang'),
+    re_path(r'^mystyle/',MyStyleFile.as_view(),name='change_style'),
+    re_path(r'^language/detail/(?P<lang>[-\w+]+)/',GetLangDetails.as_view(),name='detail_lang'),
     path('bookmark/add/',AddBookMark.as_view(),name='add_bookmark'),
     path('bookmark/delete/',DeleteBookMark.as_view(),name='delete_bookmark'),
     path('user/<int:pk>/',UserDetail.as_view(),name='user_detail'),
-
 ]
