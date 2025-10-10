@@ -5,7 +5,7 @@
 Contributer Page
 
 {% for obj in users %}
-<p>  {{obj.email}} has contributed {{obj.score}} snippets </p>
+<p>  {{obj.username|default:"NA"}} has contributed {{obj.score}} snippets </p>
 {% endfor %}
 
 {% endblock content %}

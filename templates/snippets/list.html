@@ -24,7 +24,7 @@
           <div class="card-content">
             <p class="title is-5 has-text-dark">{{ object.title }}</p>
             <p class="subtitle is-7 has-text-grey">
-              by: {{ object.coder.email }} | {{ object.publication_date|naturaltime }}
+              by: {{ object.coder.username|default:"NA" }} | {{ object.publication_date|naturaltime }}
             </p>
             <p class="subtitle is-6 has-text-info truncate-text">
               {{ object.description_html|safe|truncatechars:120 }}

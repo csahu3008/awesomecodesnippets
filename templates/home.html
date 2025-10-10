@@ -168,7 +168,7 @@
                 <div>
                   <a href="{% url 'detail_snippet' obj.id %}"> {{obj.title}}</a>
                 </div>
-                <div>by - ({{obj.coder.email}}) : {{obj.publication_date|naturaltime}}</div>
+                <div>by - ({{obj.coder.username|default:"NA"}}) : {{obj.publication_date|naturaltime}}</div>
               </div>
             </div>
           </div>
@@ -208,7 +208,7 @@
 
           {% for obj in top_contributers %}
           <div class="box">
-            {{obj.email}} has conrtibuted {{obj.score}} snippets
+            {{obj.username|default:"NA"}} has conrtibuted {{obj.score}} snippets
             See Profile
             <a href='{% url "user_detail" obj.id %}'>click here</a>
           </div>
