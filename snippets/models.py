@@ -59,14 +59,14 @@ class Snippet(models.Model):
     def highlight(self):
         return highlight(self.code,get_lexer_by_name(self.language,stripall=True,encoding="utf-8"),formatters.HtmlFormatter(style=self.style,linenos=True,cssclass=self.style))
     
-    def save(self,force_insert=False,force_update=False):
+    def save(self, *args, **kwargs):
         if not self.id:
             self.publication_date=datetime.datetime.now()
         
         self.updated_date=datetime.datetime.now()
         self.description_html=markdown(self.description)
         self.highlighted_code=self.highlight()
-        super(Snippet,self).save(force_insert,force_update)
+        super().save(*args, **kwargs)
 
 
 class BookMark(models.Model):
