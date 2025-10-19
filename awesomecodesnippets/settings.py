@@ -96,6 +96,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://curioventure.xyz',
+    'https://awesomecode-snippets-v2.onrender.com',
+    'https://awesomecodesnippets-v2.curioventure.xyz'
 ]
 CORS_ALLOW_ALL_ORIGINS=False
 
